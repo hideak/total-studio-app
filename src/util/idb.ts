@@ -1,7 +1,9 @@
-import DatabaseConnection from '@/models/database-connection.model';
+import DatabaseConnection from '@/model/database-connection.model';
 
-const indexedDBNotAvailable: string = 'Sorry, but the IndexedDB is not available in your browser';
-const indexedDBError: string = 'Sorry, an error ocurred during the request of IndexedDB';
+const indexedDBNotAvailable: string =
+  'Sorry, but the IndexedDB is not available in your browser';
+const indexedDBError: string =
+  'Sorry, an error ocurred during the request of IndexedDB';
 
 /**
  * Connects to a database by pouplating a Database Connection

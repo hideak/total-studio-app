@@ -4,11 +4,13 @@
 
 :root {
   font-family: $app-font-family;
+  height: 100%;
 }
 
 body {
   margin: 0;
   padding: 0;
+  height: 100%;
 
   color: $app-font-color;
   background-color: $app-background-color;

@@ -15,4 +15,8 @@ export default defineComponent({
 
 <style lang="scss">
 @import '@/styles/global.scss';
+
+div#app {
+  height: 100%;
+}
 </style>
