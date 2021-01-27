@@ -22,5 +22,16 @@ div.list-item {
   padding: 1rem 1.25rem;
   font-size: 1.125rem;
   background-color: $app-background-color-white;
+  border-top: 1px solid $app-border-color;
+
+  &:hover {
+    color: $app-font-color-white;
+    background-color: $app-button-color-alternative-hover;
+  }
+
+  &:active {
+    color: $app-font-color-white;
+    background-color: $app-button-color-alternative-active;
+  }
 }
 </style>
