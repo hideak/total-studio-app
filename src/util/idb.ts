@@ -1,4 +1,4 @@
-import DatabaseConnection from '@/model/database-connection.model';
+import DatabaseConnection from '@/model/interface/database-connection.interface';
 
 const indexedDBNotAvailable: string =
   'Sorry, but the IndexedDB is not available in your browser';

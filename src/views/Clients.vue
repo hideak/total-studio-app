@@ -1,28 +1,40 @@
 <template>
   <div class="clients">
-    <div class="title">
-      <img src="@/assets/img/user-friends-solid.svg" alt="Clients icon" />
-      <span>Meus Clientes</span>
-    </div>
-    <div class="items">
-      <ListItem content="Pessoa 1" />
-      <ListItem content="Pessoa 2" />
-      <ListItem content="Pessoa 3" />
-    </div>
-    <AddCircleButton />
+    <ScrollableList
+      title="Meus Clientes"
+      :icon="require('@/assets/img/user-friends-solid.svg')"
+      :items="clients"
+      :addAction="clientAddAction"
+      :itemAction="clientItemAction"
+    />
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import AddCircleButton from '@/components/AddCircleButton.vue';
-import ListItem from '@/components/ListItem.vue';
+import ScrollableList from '@/components/ScrollableList.vue';
+import clients from '@/data/clients.data.ts';
+import router from '@/router';
 
 export default defineComponent({
   name: 'Clients',
   components: {
-    AddCircleButton,
-    ListItem
+    ScrollableList
+  },
+  setup() {
+    /**
+     * Navigates to the new client screen
+     */
+    const clientAddAction = () => router.push({ name: 'NewClient' });
+
+    /**
+     * Navigates to the edit client screen
+     */
+    const clientItemAction = (id: number) =>
+      router.push({ name: 'EditClient', params: { id } });
+
+    // expose template variables
+    return { clients, clientAddAction, clientItemAction };
   }
 });
 </script>
@@ -31,34 +43,6 @@ export default defineComponent({
 @import '@/styles/variables.scss';
 
 div.clients {
-  display: flex;
-  flex-direction: column;
   height: 100%;
-}
-
-div.title {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 1.5rem 0 1.5rem 0;
-  font-size: 1.5rem;
-  background-color: $app-background-color;
-
-  img {
-    height: 1.875rem;
-    margin-right: 1rem;
-  }
-}
-
-div.items {
-  flex-grow: 1;
-  overflow-y: scroll;
-}
-
-div.add-circle-button {
-  position: fixed;
-  right: 1.375rem;
-  bottom: 1.375rem;
 }
 </style>
