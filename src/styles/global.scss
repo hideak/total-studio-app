@@ -1,0 +1,29 @@
+@import '@/styles/fonts';
+@import '@/styles/variables';
+@import '@/styles/mixins';
+
+:root {
+  font-family: $app-font-family;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+
+  color: $app-font-color;
+  background-color: $app-background-color;
+
+  .slide-fade-enter-active {
+    transition: all 0.15s ease;
+  }
+
+  .slide-fade-leave-active {
+    transition: all 0.15s ease;
+  }
+
+  .slide-fade-enter-from,
+  .slide-fade-leave-to {
+    transform: translateY(-10px);
+    opacity: 0;
+  }
+}

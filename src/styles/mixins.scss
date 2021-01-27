@@ -1,0 +1,19 @@
+// Media queries mixins designed for desktop-first
+
+@mixin tablet-landscape-size {
+  @media screen and (max-width: 75em) {
+    @content;
+  }
+}
+
+@mixin tablet-portrait-size {
+  @media screen and (max-width: 56.25em) {
+    @content;
+  }
+}
+
+@mixin phone-size {
+  @media screen and (max-width: 37.5em) {
+    @content;
+  }
+}
