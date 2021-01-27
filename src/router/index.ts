@@ -4,6 +4,7 @@ import Clients from '../views/Clients.vue';
 import Services from '../views/Services.vue';
 import ClientForm from '../views/ClientForm.vue';
 import ServiceForm from '../views/ServiceForm.vue';
+import ClientDetails from '../views/ClientDetails.vue';
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -20,6 +21,11 @@ const routes: Array<RouteRecordRaw> = [
     path: '/services',
     name: 'Services',
     component: Services
+  },
+  {
+    path: '/clients/:id',
+    name: 'ClientDetails',
+    component: ClientDetails
   },
   {
     path: '/clients/new',

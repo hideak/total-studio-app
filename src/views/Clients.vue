@@ -31,7 +31,7 @@ export default defineComponent({
      * Navigates to the edit client screen
      */
     const clientItemAction = (id: number) =>
-      router.push({ name: 'EditClient', params: { id } });
+      router.push({ name: 'ClientDetails', params: { id } });
 
     // expose template variables
     return { clients, clientAddAction, clientItemAction };

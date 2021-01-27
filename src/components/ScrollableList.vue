@@ -1,9 +1,6 @@
 <template>
   <div class="scrollable-list">
-    <div class="title">
-      <img :src="icon" alt="Clients icon" />
-      <span>{{ title }} </span>
-    </div>
+    <TitleBar :title="title" :icon="icon" />
     <div class="items">
       <ListItem
         v-for="item in items"
@@ -20,15 +17,17 @@
 import { defineComponent } from 'vue';
 import AddCircleButton from '@/components/AddCircleButton.vue';
 import ListItem from '@/components/ListItem.vue';
+import TitleBar from '@/components/TitleBar.vue';
 
 export default defineComponent({
   name: 'ScrollableList',
   components: {
     AddCircleButton,
-    ListItem
+    ListItem,
+    TitleBar
   },
   props: {
-    title: { type: String, default: 'Scrollable List' },
+    title: { type: String },
     icon: { type: String },
     items: { type: Array },
     addAction: { type: Function },
@@ -44,21 +43,6 @@ div.scrollable-list {
   display: flex;
   flex-direction: column;
   height: 100%;
-}
-
-div.title {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 1.5rem 0 1.5rem 0;
-  font-size: 1.5rem;
-  background-color: $app-background-color;
-
-  img {
-    height: 1.875rem;
-    margin-right: 1rem;
-  }
 }
 
 div.items {
