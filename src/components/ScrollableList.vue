@@ -1,9 +1,16 @@
 <template>
   <div class="scrollable-list">
     <TitleBar :title="title" :icon="icon" />
+    <InputField
+      hasIcon
+      :icon="require('@/assets/img/search-solid.svg')"
+      :placeholder="searchPlaceholder"
+      v-model="searchValue"
+      @update:modelValue="filterContent"
+    />
     <div class="items">
       <ListItem
-        v-for="item in items"
+        v-for="item in filteredItems"
         :key="item.id"
         :content="item.name"
         @click="itemAction(item.id)"
@@ -14,24 +21,45 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, ref, PropType } from 'vue';
 import AddCircleButton from '@/components/AddCircleButton.vue';
 import ListItem from '@/components/ListItem.vue';
 import TitleBar from '@/components/TitleBar.vue';
+import InputField from '@/components/InputField.vue';
+import SortableListItem from '@/model/interface/sortable-list-item.interface.ts';
 
 export default defineComponent({
   name: 'ScrollableList',
   components: {
     AddCircleButton,
     ListItem,
-    TitleBar
+    TitleBar,
+    InputField
   },
   props: {
     title: { type: String },
     icon: { type: String },
-    items: { type: Array },
+    items: { type: Object as PropType<SortableListItem[]>, default: [] },
+    searchPlaceholder: { type: String },
     addAction: { type: Function },
     itemAction: { type: Function }
+  },
+  setup(props) {
+    const searchValue = ref('');
+    const filteredItems = ref(props.items);
+
+    /**
+     * Filters the content based on the query string in the search field
+     */
+    const filterContent = (): void => {
+      filteredItems.value = props.items.filter((item: SortableListItem) => {
+        return item.name
+          .toLowerCase()
+          .includes(searchValue.value.toLowerCase());
+      });
+    };
+
+    return { searchValue, filteredItems, filterContent };
   }
 });
 </script>

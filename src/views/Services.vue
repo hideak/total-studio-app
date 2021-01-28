@@ -3,6 +3,7 @@
     <ScrollableList
       title="Meus Serviços"
       :icon="require('@/assets/img/cut-solid.svg')"
+      :searchPlaceholder="'Pesquisar serviços...'"
       :items="services"
       :addAction="serviceAddAction"
       :itemAction="serviceItemAction"

@@ -4,6 +4,7 @@
       title="Meus Clientes"
       :icon="require('@/assets/img/user-friends-solid.svg')"
       :items="clients"
+      :searchPlaceholder="'Pesquisar clientes...'"
       :addAction="clientAddAction"
       :itemAction="clientItemAction"
     />
