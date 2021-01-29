@@ -13,6 +13,17 @@
       <div class="items">
         <ServiceItem />
         <ServiceItem />
+        <ServiceItem />
+        <ServiceItem />
+        <ServiceItem />
+        <ServiceItem />
+        <ServiceItem />
+        <ServiceItem />
+        <ServiceItem />
+        <ServiceItem />
+        <ServiceItem />
+        <ServiceItem />
+        <ServiceItem />
       </div>
     </div>
     <AddCircleButton />
@@ -55,7 +66,7 @@ div.client-details {
     display: flex;
     flex-direction: column;
     flex-grow: 1;
-    overflow-y: scroll;
+    overflow-y: hidden;
 
     div.name {
       background-color: $app-background-color-white;
