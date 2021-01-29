@@ -4,6 +4,9 @@
       <div class="title">Total Studio</div>
       <div class="subtitle">Salão de Beleza</div>
     </div>
+    <div class="logo">
+      <img src="@/assets/img/app-logo.jpg" alt="Logo do aplicativo" />
+    </div>
     <div class="instructions">Selecione uma opção</div>
     <div class="cards">
       <Card
@@ -45,6 +48,11 @@ div.header {
   flex-direction: column;
   align-items: center;
   margin: 2rem 0 2rem 0;
+}
+
+div.logo img {
+  height: 6rem;
+  margin-bottom: 2rem;
 }
 
 div.title {

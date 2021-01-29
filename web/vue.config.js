@@ -4,11 +4,11 @@
 module.exports = {
   pwa: {
     name: 'Total Studio App',
-    themeColor: '#ea0070',
-    msTileColor: '#ea0070',
+    themeColor: '#fafafa',
+    msTileColor: '#fafafa',
     manifestOptions: {
       short_name: 'Total Studio App',
-      background_color: '#ea0070'
+      background_color: '#fafafa'
     }
   },
   configureWebpack: {
