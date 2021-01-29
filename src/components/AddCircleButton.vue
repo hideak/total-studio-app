@@ -22,6 +22,7 @@ div.add-circle-button {
   height: 3.75rem;
   border-radius: 50%;
   background-color: $app-button-color-primary;
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.25);
 
   img {
     height: 1.5625rem;

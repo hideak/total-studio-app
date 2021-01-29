@@ -25,11 +25,13 @@ div.list-item {
   border-top: 1px solid $app-border-color;
 
   &:hover {
+    cursor: pointer;
     color: $app-font-color-white;
     background-color: $app-button-color-alternative-hover;
   }
 
   &:active {
+    cursor: pointer;
     color: $app-font-color-white;
     background-color: $app-button-color-alternative-active;
   }

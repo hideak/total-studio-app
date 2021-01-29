@@ -10,5 +10,8 @@ module.exports = {
       short_name: 'Total Studio App',
       background_color: '#ea0070'
     }
+  },
+  configureWebpack: {
+    devtool: 'source-map'
   }
 };
