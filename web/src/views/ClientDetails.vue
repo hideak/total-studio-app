@@ -77,6 +77,7 @@ div.client-details {
     div.services {
       display: flex;
       align-items: center;
+      border-bottom: 1px solid $app-border-color;
       padding: 0 1.25rem 1rem 1rem;
       background-color: $app-background-color-white;
 
