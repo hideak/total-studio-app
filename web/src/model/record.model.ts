@@ -1,9 +1,9 @@
 import Service from './service.model';
 
 /**
- * Class that represents the registration of a service
+ * Class that represents the record of a service
  */
-export default class Register {
+export default class Record {
   date: Date;
   service: Service;
   details: string;

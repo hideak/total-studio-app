@@ -1,5 +1,5 @@
 import SortableListItem from './interface/sortable-list-item.interface';
-import Register from './register.model';
+import Record from './record.model';
 
 /**
  * Class that represents a client
@@ -9,7 +9,7 @@ export default class Client implements SortableListItem {
   name: string;
   phone: string;
   birthday: Date;
-  registers: Register[];
+  records: Record[];
 
   /**
    * Constructor
@@ -19,6 +19,6 @@ export default class Client implements SortableListItem {
     this.name = name;
     this.phone = phone;
     this.birthday = birthday;
-    this.registers = [];
+    this.records = [];
   }
 }

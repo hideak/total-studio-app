@@ -1,5 +1,5 @@
 <template>
-  <div class="client-form">
+  <div class="record-form">
     <TitleBar
       title="Meus Clientes"
       :icon="require('@/assets/img/user-friends-solid.svg')"
@@ -10,27 +10,35 @@
       </div>
       <div class="input-group">
         <Label
-          label="Nome"
+          label="Cliente"
           :src="require('@/assets/img/user-friends-solid.svg')"
         />
-        <InputField placeholder="Digite o nome do cliente..." />
+        <Label hideIcon noPadding :label="name" />
+      </div>
+      <div class="input-group">
+        <Label label="Serviço" :src="require('@/assets/img/cut-solid.svg')" />
+        <InputField placeholder="Selecione um serviço..." />
       </div>
       <div class="input-group">
         <Label
-          label="Aniversário"
-          :src="require('@/assets/img/birthday-cake-solid.svg')"
+          label="Data"
+          :src="require('@/assets/img/calendar-day-solid.svg')"
         />
-        <InputField placeholder="Digite o aniversário do cliente..." />
+        <InputField placeholder="Selecione uma data..." />
+      </div>
+      <div class="input-group">
+        <Label label="Horário" :src="require('@/assets/img/clock-solid.svg')" />
+        <InputField placeholder="Selecione um horário..." />
       </div>
       <div class="input-group">
         <Label
-          label="Outras Informações"
+          label="Detalhes do serviço"
           :src="require('@/assets/img/info-circle-solid.svg')"
         />
-        <InputField placeholder="Digite outras informações do cliente..." />
+        <InputField placeholder="Digite outras informações do registro..." />
       </div>
       <div class="buttons">
-        <Button isAlternativeColor label="Salvar cliente" />
+        <Button isAlternativeColor label="Salvar registro" />
         <Button label="Cancelar" />
       </div>
     </div>
@@ -45,7 +53,7 @@ import Label from '@/components/Label.vue';
 import Button from '@/components/Button.vue';
 
 export default defineComponent({
-  name: 'ClientForm',
+  name: 'RecordForm',
   components: {
     TitleBar,
     InputField,
@@ -54,22 +62,25 @@ export default defineComponent({
   },
   setup() {
     const isEditing = ref(false);
+    const name = 'Client name (Mock)';
 
     /**
      * Returns a computed property depending on the edit mode
      */
     const header = computed(() => {
-      return isEditing.value ? 'Editar cliente' : 'Cadastrar novo cliente';
+      return isEditing.value
+        ? 'Editar registro de serviço'
+        : 'Novo registro de serviço';
     });
 
     // expose template variables
-    return { isEditing, header };
+    return { isEditing, name, header };
   }
 });
 </script>
 
 <style lang="scss" scoped>
-div.client-form {
+div.record-form {
   display: flex;
   flex-direction: column;
   height: 100%;

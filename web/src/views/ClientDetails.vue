@@ -26,7 +26,7 @@
         <ServiceItem />
       </div>
     </div>
-    <AddCircleButton />
+    <AddCircleButton @click="recordAddAction" />
   </div>
 </template>
 
@@ -36,6 +36,7 @@ import TitleBar from '@/components/TitleBar.vue';
 import ServiceItem from '@/components/ServiceItem.vue';
 import AddCircleButton from '@/components/AddCircleButton.vue';
 import { useRoute } from 'vue-router';
+import router from '@/router';
 
 export default defineComponent({
   name: 'ClientDetails',
@@ -47,9 +48,16 @@ export default defineComponent({
   setup() {
     const route = useRoute();
     const name = `Cliente ${route.params.id} (Mock)`;
+    const clientId = route.params.id;
+
+    /**
+     * Navigates to the new record screen
+     */
+    const recordAddAction = () =>
+      router.push({ name: 'NewRecord', params: { id: clientId } });
 
     // exposed template variables
-    return { name };
+    return { name, recordAddAction };
   }
 });
 </script>
