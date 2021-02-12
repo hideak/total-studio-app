@@ -1,7 +1,7 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "3df106786ca123540431",
-    "url": "/css/app.b05105ca.css"
+    "revision": "07670f1d95ca830fc733",
+    "url": "/css/app.8ca54679.css"
   },
   {
     "revision": "11eabca2251325cfc5589c9c6fb57b46",
@@ -40,6 +40,10 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/img/info-circle-solid.f8b35438.svg"
   },
   {
+    "revision": "e203089a7bc113a1f27cf00163e6b2a9",
+    "url": "/img/pen-solid.e203089a.svg"
+  },
+  {
     "revision": "381735aaed8a9dba61538a2928808a87",
     "url": "/img/phone-solid.381735aa.svg"
   },
@@ -56,12 +60,12 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/img/user-friends-solid.55645753.svg"
   },
   {
-    "revision": "dfee2dfc1461fb2d4f7da3569da3de89",
+    "revision": "8e1ea7b31cc991ccbbc581707a8369fa",
     "url": "/index.html"
   },
   {
-    "revision": "3df106786ca123540431",
-    "url": "/js/app.ee932dda.js"
+    "revision": "07670f1d95ca830fc733",
+    "url": "/js/app.ff02d518.js"
   },
   {
     "revision": "6e3eafa0f8ed601ece73",
