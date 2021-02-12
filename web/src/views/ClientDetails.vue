@@ -5,25 +5,17 @@
       :icon="require('@/assets/img/user-friends-solid.svg')"
     />
     <div class="content">
-      <div class="name">{{ name }}</div>
+      <div class="name">{{ client.name }}</div>
       <div class="services">
         <img src="@/assets/img/cut-solid.svg" alt="Services icon" />
         Serviços realizados
       </div>
       <div class="items">
-        <ServiceItem />
-        <ServiceItem />
-        <ServiceItem />
-        <ServiceItem />
-        <ServiceItem />
-        <ServiceItem />
-        <ServiceItem />
-        <ServiceItem />
-        <ServiceItem />
-        <ServiceItem />
-        <ServiceItem />
-        <ServiceItem />
-        <ServiceItem />
+        <ServiceItem
+          v-for="record in client.records"
+          :key="record.id"
+          :record="record"
+        />
       </div>
     </div>
     <AddCircleButton @click="recordAddAction" />
@@ -32,10 +24,11 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
+import { useRoute } from 'vue-router';
 import TitleBar from '@/components/TitleBar.vue';
 import ServiceItem from '@/components/ServiceItem.vue';
 import AddCircleButton from '@/components/AddCircleButton.vue';
-import { useRoute } from 'vue-router';
+import ClientMockService from '@/services/client-mock-service.ts';
 import router from '@/router';
 
 export default defineComponent({
@@ -46,9 +39,13 @@ export default defineComponent({
     AddCircleButton
   },
   setup() {
+    // getting the id of the client
     const route = useRoute();
-    const name = `Cliente ${route.params.id} (Mock)`;
-    const clientId = route.params.id;
+    const clientId = parseInt(route.params.id as string, 10);
+
+    // getting the client object
+    const clientService = new ClientMockService();
+    const client = clientService.get(clientId);
 
     /**
      * Navigates to the new record screen
@@ -57,7 +54,7 @@ export default defineComponent({
       router.push({ name: 'NewRecord', params: { id: clientId } });
 
     // exposed template variables
-    return { name, recordAddAction };
+    return { client, recordAddAction };
   }
 });
 </script>

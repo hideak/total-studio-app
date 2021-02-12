@@ -5,23 +5,31 @@
       {{ computedDate }}
     </div>
     <div class="service">
-      {{ name }}
+      {{ record.service.name }}
     </div>
     <div class="details">
-      {{ details }}
+      {{ record.details }}
     </div>
   </div>
 </template>
 
 <script lang="ts">
 import { computed, defineComponent, PropType } from 'vue';
+import Record from '@/model/record.model.ts';
+import Service from '@/model/service.model.ts';
 
 export default defineComponent({
   name: 'ServiceItem',
   props: {
-    name: { type: String, default: 'Service Name' },
-    date: { type: Object as PropType<Date>, default: new Date() },
-    details: { type: String, default: 'Details' }
+    record: {
+      type: Object as PropType<Record>,
+      default: new Record(
+        0,
+        new Date(),
+        new Service(0, 'Service', 'Details'),
+        'Details'
+      )
+    }
   },
   setup(props) {
     /**
@@ -29,26 +37,30 @@ export default defineComponent({
      */
     const computedDate = computed(() => {
       // getting the year as a string
-      const year = props.date.getFullYear().toString();
+      const year = props.record.date.getFullYear().toString();
 
       // getting the month as a string
-      const rawMonth = (props.date.getMonth() + 1).toString();
+      const rawMonth = (props.record.date.getMonth() + 1).toString();
       const month = rawMonth.length == 1 ? `0${rawMonth}` : rawMonth;
 
       // getting the day as a string
-      const rawDay = props.date.getDay().toString();
+      const rawDay = props.record.date.getDate().toString();
       const day = rawDay.length == 1 ? `0${rawDay}` : rawDay;
 
       // getting the hour as a string
-      const rawHour = props.date.getHours().toString();
+      const rawHour = props.record.date.getHours().toString();
       const hour = rawHour.length == 1 ? `0${rawHour}` : rawHour;
 
       // getting the minute as a string
-      const rawMinute = props.date.getMinutes().toString();
+      const rawMinute = props.record.date.getMinutes().toString();
       const minute = rawMinute.length == 1 ? `0${rawMinute}` : rawMinute;
 
+      // getting the day of the week
+      const weekDays = ['dom', 'seg', 'ter', 'qua', 'qui', 'sex', 'sáb'];
+      const weekDay = weekDays[props.record.date.getDay()];
+
       // returning formatted date
-      return `${day}/${month}/${year} @ ${hour}:${minute}`;
+      return `${day}/${month}/${year} (${weekDay}) @ ${hour}:${minute}`;
     });
 
     // expose template variables

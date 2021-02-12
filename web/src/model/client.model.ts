@@ -14,11 +14,17 @@ export default class Client implements SortableListItem {
   /**
    * Constructor
    */
-  constructor(id: number, name: string, phone: string, birthday: Date) {
+  constructor(
+    id: number,
+    name: string,
+    phone: string,
+    birthday: Date,
+    records: Record[]
+  ) {
     this.id = id;
     this.name = name;
     this.phone = phone;
     this.birthday = birthday;
-    this.records = [];
+    this.records = records;
   }
 }
