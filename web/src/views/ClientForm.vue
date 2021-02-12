@@ -54,6 +54,7 @@
 
 <script lang="ts">
 import { computed, defineComponent, ref } from 'vue';
+import { useRoute } from 'vue-router';
 import TitleBar from '@/components/TitleBar.vue';
 import InputField from '@/components/InputField.vue';
 import Label from '@/components/Label.vue';
@@ -70,8 +71,10 @@ export default defineComponent({
     Label,
     Button
   },
-  setup() {
-    const isEditing = ref(false);
+  props: {
+    isEditing: { type: Boolean, default: false }
+  },
+  setup(props) {
     const name = ref('');
     const phone = ref('');
     const birthday = ref('');
@@ -79,10 +82,31 @@ export default defineComponent({
     const clientService = new ClientMockService();
 
     /**
+     * Returns a date as a string in the YYYY-MM-DD format
+     * @param date the date to be converted
+     * @returns a string representing the date
+     */
+    const dateToString = (date: Date): string => {
+      // getting the year as a string
+      const year = date.getFullYear().toString();
+
+      // getting the month as a string
+      const rawMonth = (date.getMonth() + 1).toString();
+      const month = rawMonth.length == 1 ? `0${rawMonth}` : rawMonth;
+
+      // getting the day as a string
+      const rawDay = date.getDate().toString();
+      const day = rawDay.length == 1 ? `0${rawDay}` : rawDay;
+
+      // returning formatted date
+      return `${year}-${month}-${day}`;
+    };
+
+    /**
      * Returns a computed property depending on the edit mode
      */
     const header = computed(() => {
-      return isEditing.value ? 'Editar cliente' : 'Cadastrar novo cliente';
+      return props.isEditing ? 'Editar cliente' : 'Cadastrar novo cliente';
     });
 
     /**
@@ -126,9 +150,28 @@ export default defineComponent({
       router.go(-1);
     };
 
+    // loading information on edit
+    if (props.isEditing) {
+      // getting the client being edited
+      const route = useRoute();
+      const clientId = parseInt(route.params.id as string, 10);
+      const client = clientService.get(clientId);
+
+      // updating fields
+      name.value = client.name;
+      phone.value = client.phone;
+      console.log(client.birthday);
+      console.log(birthday.value);
+      if (client.birthday) {
+        console.log(dateToString(client.birthday));
+      }
+      birthday.value = client.birthday ? dateToString(client.birthday) : '';
+      console.log(birthday.value);
+      additionalInfo.value = client.additionalInfo;
+    }
+
     // expose template variables
     return {
-      isEditing,
       name,
       phone,
       birthday,

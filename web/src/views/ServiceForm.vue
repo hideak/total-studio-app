@@ -51,8 +51,10 @@ export default defineComponent({
     Label,
     Button
   },
-  setup() {
-    const isEditing = ref(false);
+  props: {
+    isEditing: { type: Boolean, default: false }
+  },
+  setup(props) {
     const name = ref('');
     const details = ref('');
     const serviceService = new ServiceMockService();
@@ -61,7 +63,7 @@ export default defineComponent({
      * Returns a computed property depending on the edit mode
      */
     const header = computed(() => {
-      return isEditing.value ? 'Editar serviço' : 'Cadastrar novo serviço';
+      return props.isEditing ? 'Editar serviço' : 'Cadastrar novo serviço';
     });
 
     /**
@@ -95,7 +97,7 @@ export default defineComponent({
     };
 
     // expose template variables
-    return { isEditing, name, details, header, cancelAction, saveAction };
+    return { name, details, header, cancelAction, saveAction };
   }
 });
 </script>

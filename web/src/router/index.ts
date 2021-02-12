@@ -51,11 +51,13 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/clients/:id/edit',
     name: 'EditClient',
+    props: { isEditing: true },
     component: ClientForm
   },
   {
     path: '/services/:id/edit',
     name: 'EditService',
+    props: { isEditing: true },
     component: ServiceForm
   }
 ];

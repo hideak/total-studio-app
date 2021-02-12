@@ -5,7 +5,10 @@
       :icon="require('@/assets/img/user-friends-solid.svg')"
     />
     <div class="content">
-      <div class="name">{{ client.name }}</div>
+      <div class="name">
+        {{ client.name }}
+        <EditCircleButton @click="clientEditAction" />
+      </div>
       <div class="services">
         <img src="@/assets/img/cut-solid.svg" alt="Services icon" />
         Serviços realizados
@@ -28,6 +31,7 @@ import { useRoute } from 'vue-router';
 import TitleBar from '@/components/TitleBar.vue';
 import ServiceItem from '@/components/ServiceItem.vue';
 import AddCircleButton from '@/components/AddCircleButton.vue';
+import EditCircleButton from '@/components/EditCircleButton.vue';
 import ClientMockService from '@/services/client-mock-service.ts';
 import router from '@/router';
 
@@ -36,7 +40,8 @@ export default defineComponent({
   components: {
     TitleBar,
     ServiceItem,
-    AddCircleButton
+    AddCircleButton,
+    EditCircleButton
   },
   setup() {
     // getting the id of the client
@@ -50,11 +55,19 @@ export default defineComponent({
     /**
      * Navigates to the new record screen
      */
-    const recordAddAction = () =>
+    const recordAddAction = (): void => {
       router.push({ name: 'NewRecord', params: { id: clientId } });
+    };
+
+    /**
+     * Navigates to the edition of the client
+     */
+    const clientEditAction = (): void => {
+      router.push({ name: 'EditClient', params: { id: clientId } });
+    };
 
     // exposed template variables
-    return { client, recordAddAction };
+    return { client, recordAddAction, clientEditAction };
   }
 });
 </script>
@@ -74,6 +87,9 @@ div.client-details {
     overflow-y: hidden;
 
     div.name {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
       background-color: $app-background-color-white;
       padding: 1rem 1.25rem 1rem 1rem;
       font-size: 1.125rem;
