@@ -2,7 +2,7 @@
   <div class="input-field">
     <input
       class="input-field"
-      type="text"
+      :type="type"
       :value="modelValue"
       :placeholder="placeholder"
       @input="inputHandler"
@@ -18,6 +18,7 @@ export default defineComponent({
   name: 'InputField',
   props: {
     modelValue: { type: String },
+    type: { type: String, default: 'text' },
     placeholder: { type: String, default: '' },
     hasIcon: { type: Boolean, default: false },
     icon: { type: String }
@@ -59,6 +60,12 @@ div.input-field {
     &:focus {
       outline: 2px solid $app-outline-color;
     }
+  }
+
+  input[type='date'] {
+    -webkit-appearance: none;
+    font-family: 'Roboto Regular';
+    background-color: $app-background-color-white;
   }
 
   img {

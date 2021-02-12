@@ -8,7 +8,8 @@ export default class Client implements SortableListItem {
   id: number;
   name: string;
   phone: string;
-  birthday: Date;
+  birthday: Date | null;
+  additionalInfo: string;
   records: Record[];
 
   /**
@@ -18,13 +19,15 @@ export default class Client implements SortableListItem {
     id: number,
     name: string,
     phone: string,
-    birthday: Date,
+    birthday: Date | null,
+    additionalInfo: string,
     records: Record[]
   ) {
     this.id = id;
     this.name = name;
     this.phone = phone;
     this.birthday = birthday;
+    this.additionalInfo = additionalInfo;
     this.records = records;
   }
 }
