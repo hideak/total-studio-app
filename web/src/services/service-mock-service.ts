@@ -41,7 +41,9 @@ export default class ServiceMockService implements ServiceInterface<Service> {
    */
   update(entity: Service): Service {
     // finding the service to update
-    const service = services.find((service: Service) => service.id === entity.id);
+    const service = services.find(
+      (service: Service) => service.id === entity.id
+    );
     if (service === undefined) {
       throw new Error(`client not found with id ${entity.id}`);
     }
