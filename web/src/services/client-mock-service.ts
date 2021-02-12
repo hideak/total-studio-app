@@ -37,7 +37,7 @@ export default class ClientMockService implements ServiceInterface<Client> {
 
   /**
    * Updates a client in the mocked data
-   * @param client the client to be updated
+   * @param entity the client to be updated
    */
   update(entity: Client): Client {
     // finding the client to update
@@ -54,7 +54,7 @@ export default class ClientMockService implements ServiceInterface<Client> {
 
   /**
    * Deletes a client in the mocked data
-   * @param client the client to be deleted
+   * @param id the id of the client to be deleted
    */
   delete(id: number): void {
     // finding the client to update

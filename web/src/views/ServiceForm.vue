@@ -13,18 +13,21 @@
           label="Nome do serviço"
           :src="require('@/assets/img/cut-solid.svg')"
         />
-        <InputField placeholder="Digite o nome do serviço..." />
+        <InputField placeholder="Digite o nome do serviço..." v-model="name" />
       </div>
       <div class="input-group">
         <Label
           label="Outras Informações"
           :src="require('@/assets/img/info-circle-solid.svg')"
         />
-        <InputField placeholder="Digite outras informações do serviço..." />
+        <InputField
+          placeholder="Digite outras informações do serviço..."
+          v-model="details"
+        />
       </div>
       <div class="buttons">
-        <Button isAlternativeColor label="Salvar serviço" />
-        <Button label="Cancelar" />
+        <Button isAlternativeColor label="Salvar serviço" @click="saveAction" />
+        <Button label="Cancelar" @click="cancelAction" />
       </div>
     </div>
   </div>
@@ -36,6 +39,9 @@ import TitleBar from '@/components/TitleBar.vue';
 import InputField from '@/components/InputField.vue';
 import Label from '@/components/Label.vue';
 import Button from '@/components/Button.vue';
+import Service from '@/model/service.model.ts';
+import ServiceMockService from '@/services/service-mock-service.ts';
+import router from '@/router';
 
 export default defineComponent({
   name: 'ServiceForm',
@@ -47,6 +53,9 @@ export default defineComponent({
   },
   setup() {
     const isEditing = ref(false);
+    const name = ref('');
+    const details = ref('');
+    const serviceService = new ServiceMockService();
 
     /**
      * Returns a computed property depending on the edit mode
@@ -55,8 +64,38 @@ export default defineComponent({
       return isEditing.value ? 'Editar serviço' : 'Cadastrar novo serviço';
     });
 
+    /**
+     * Handles the cancel button click and returns to the client list
+     */
+    const cancelAction = (): void => {
+      router.go(-1);
+    };
+
+    /**
+     * Handles the save button click and returns to the client list
+     */
+    const saveAction = (): void => {
+      // validate data
+      if (!name.value) {
+        window.alert('Digite um nome válido para o serviço.');
+        return;
+      }
+
+      // parse data
+      const serviceName = name.value;
+      const serviceDetails = details.value;
+
+      const newService = new Service(0, serviceName, serviceDetails);
+
+      // create data
+      serviceService.create(newService);
+
+      // return to service list
+      router.go(-1);
+    };
+
     // expose template variables
-    return { isEditing, header };
+    return { isEditing, name, details, header, cancelAction, saveAction };
   }
 });
 </script>

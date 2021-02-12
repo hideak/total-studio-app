@@ -89,7 +89,7 @@ export default defineComponent({
      * Handles the cancel button click and returns to the client list
      */
     const cancelAction = (): void => {
-      router.push({ name: 'Clients' });
+      router.go(-1);
     };
 
     /**
@@ -123,7 +123,7 @@ export default defineComponent({
       clientService.create(newClient);
 
       // return to client list
-      router.push({ name: 'Clients' });
+      router.go(-1);
     };
 
     // expose template variables
