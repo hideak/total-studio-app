@@ -45,8 +45,24 @@
         />
       </div>
       <div class="buttons">
-        <Button isAlternativeColor label="Salvar cliente" @click="saveAction" />
-        <Button label="Cancelar" @click="cancelAction" />
+        <Button
+          v-if="!isEditing"
+          isAlternativeColor
+          label="Salvar cliente"
+          @click="saveAction"
+        />
+        <Button v-if="!isEditing" label="Cancelar" @click="cancelAction" />
+        <Button
+          v-if="isEditing"
+          isAlternativeColor
+          label="Salvar cliente"
+          @click="editAction"
+        />
+        <Button
+          v-if="isEditing"
+          label="Excluir Cliente"
+          @click="deleteAction"
+        />
       </div>
     </div>
   </div>
@@ -55,6 +71,7 @@
 <script lang="ts">
 import { computed, defineComponent, ref } from 'vue';
 import { useRoute } from 'vue-router';
+import { stringToDate, dateToString } from '@/util/date-utils.ts';
 import TitleBar from '@/components/TitleBar.vue';
 import InputField from '@/components/InputField.vue';
 import Label from '@/components/Label.vue';
@@ -80,27 +97,7 @@ export default defineComponent({
     const birthday = ref('');
     const additionalInfo = ref('');
     const clientService = new ClientMockService();
-
-    /**
-     * Returns a date as a string in the YYYY-MM-DD format
-     * @param date the date to be converted
-     * @returns a string representing the date
-     */
-    const dateToString = (date: Date): string => {
-      // getting the year as a string
-      const year = date.getFullYear().toString();
-
-      // getting the month as a string
-      const rawMonth = (date.getMonth() + 1).toString();
-      const month = rawMonth.length == 1 ? `0${rawMonth}` : rawMonth;
-
-      // getting the day as a string
-      const rawDay = date.getDate().toString();
-      const day = rawDay.length == 1 ? `0${rawDay}` : rawDay;
-
-      // returning formatted date
-      return `${year}-${month}-${day}`;
-    };
+    const route = useRoute();
 
     /**
      * Returns a computed property depending on the edit mode
@@ -108,6 +105,46 @@ export default defineComponent({
     const header = computed(() => {
       return props.isEditing ? 'Editar cliente' : 'Cadastrar novo cliente';
     });
+
+    /**
+     * Validates the input data before persisting
+     */
+    const validateData = (): boolean => {
+      if (!name.value) {
+        window.alert('Digite um nome válido para o cliente.');
+        return false;
+      }
+      return true;
+    };
+
+    /**
+     * Parses the client data and returns a client object
+     * @param id the id of the client being parsed
+     * @returns a new client with the parsed data
+     */
+    const parseData = (id: number): Client => {
+      const clientName = name.value;
+      const clientPhone = phone.value;
+      const clientBirthday = stringToDate(birthday.value);
+      const clientAdditionalInfo = additionalInfo.value;
+
+      return new Client(
+        id,
+        clientName,
+        clientPhone,
+        clientBirthday,
+        clientAdditionalInfo,
+        []
+      );
+    };
+
+    /**
+     * Gets the current client id from the router parameters
+     * @returns the id of the current client
+     */
+    const getClientId = (): number => {
+      return parseInt(route.params.id as string, 10);
+    };
 
     /**
      * Handles the cancel button click and returns to the client list
@@ -121,27 +158,12 @@ export default defineComponent({
      */
     const saveAction = (): void => {
       // validate data
-      if (!name.value) {
-        window.alert('Digite um nome válido para o cliente.');
+      if (!validateData()) {
         return;
       }
 
       // parse data
-      const clientName = name.value;
-      const clientPhone = phone.value;
-      const clientBirthday = !isNaN(Date.parse(birthday.value))
-        ? new Date(Date.parse(birthday.value))
-        : null;
-      const clientAdditionalInfo = additionalInfo.value;
-
-      const newClient = new Client(
-        0,
-        clientName,
-        clientPhone,
-        clientBirthday,
-        clientAdditionalInfo,
-        []
-      );
+      const newClient = parseData(0);
 
       // create data
       clientService.create(newClient);
@@ -150,23 +172,51 @@ export default defineComponent({
       router.go(-1);
     };
 
+    /**
+     * Handles the edit button click and returns to the client list
+     */
+    const editAction = (): void => {
+      // validate data
+      if (!validateData()) {
+        return;
+      }
+
+      // parse data
+      const clientId = getClientId();
+      console.log(clientId);
+      const editedClient = parseData(clientId);
+
+      // update data
+      clientService.update(editedClient);
+
+      // return to client list
+      router.go(-1);
+    };
+
+    /**
+     * Handles the delete button click and returns to the client list
+     */
+    const deleteAction = (): void => {
+      // parse data
+      const clientId = getClientId();
+
+      // delete data
+      clientService.delete(clientId);
+
+      // return to client list
+      router.go(-2);
+    };
+
     // loading information on edit
     if (props.isEditing) {
       // getting the client being edited
-      const route = useRoute();
-      const clientId = parseInt(route.params.id as string, 10);
+      const clientId = getClientId();
       const client = clientService.get(clientId);
 
       // updating fields
       name.value = client.name;
       phone.value = client.phone;
-      console.log(client.birthday);
-      console.log(birthday.value);
-      if (client.birthday) {
-        console.log(dateToString(client.birthday));
-      }
-      birthday.value = client.birthday ? dateToString(client.birthday) : '';
-      console.log(birthday.value);
+      birthday.value = dateToString(client.birthday);
       additionalInfo.value = client.additionalInfo;
     }
 
@@ -178,7 +228,9 @@ export default defineComponent({
       additionalInfo,
       header,
       cancelAction,
-      saveAction
+      saveAction,
+      editAction,
+      deleteAction
     };
   }
 });
