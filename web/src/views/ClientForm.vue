@@ -183,7 +183,6 @@ export default defineComponent({
 
       // parse data
       const clientId = getClientId();
-      console.log(clientId);
       const editedClient = parseData(clientId);
 
       // update data
