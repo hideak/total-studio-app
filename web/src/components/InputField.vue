@@ -5,6 +5,7 @@
       :type="type"
       :value="modelValue"
       :placeholder="placeholder"
+      :disabled="disabled"
       @input="inputHandler"
     />
     <img v-if="hasIcon" :src="icon" alt="Search icon" />
@@ -21,7 +22,8 @@ export default defineComponent({
     type: { type: String, default: 'text' },
     placeholder: { type: String, default: '' },
     hasIcon: { type: Boolean, default: false },
-    icon: { type: String }
+    icon: { type: String },
+    disabled: { type: Boolean, default: false }
   },
   emits: ['update:modelValue'],
   setup(props, context) {
@@ -65,6 +67,11 @@ div.input-field {
   input[type='date'] {
     -webkit-appearance: none;
     font-family: 'Roboto Regular';
+    background-color: $app-background-color-white;
+  }
+
+  input:disabled,
+  input[disabled] {
     background-color: $app-background-color-white;
   }
 

@@ -29,6 +29,7 @@ button.button {
   box-shadow: 0.125rem 0.125rem 0.25rem rgba(0, 0, 0, 0.25);
   border: none;
   outline: none;
+  width: 100%;
   font-size: 1.5rem;
   font-family: 'Roboto Regular';
 

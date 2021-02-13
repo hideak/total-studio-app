@@ -4,6 +4,7 @@
       <component :is="Component" />
     </Transition>
   </RouterView>
+  <div id="modal"></div>
 </template>
 
 <script lang="ts">

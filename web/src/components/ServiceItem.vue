@@ -5,7 +5,7 @@
       {{ computedDate }}
     </div>
     <div class="service">
-      {{ record.service.name }}
+      {{ record.service }}
     </div>
     <div class="details">
       {{ record.details }}
@@ -16,19 +16,13 @@
 <script lang="ts">
 import { computed, defineComponent, PropType } from 'vue';
 import Record from '@/model/record.model.ts';
-import Service from '@/model/service.model.ts';
 
 export default defineComponent({
   name: 'ServiceItem',
   props: {
     record: {
       type: Object as PropType<Record>,
-      default: new Record(
-        0,
-        new Date(),
-        new Service(0, 'Service', 'Details'),
-        'Details'
-      )
+      default: new Record(0, new Date(), 'Name', 'Details')
     }
   },
   setup(props) {

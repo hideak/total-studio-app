@@ -18,6 +18,15 @@ export default class ServiceMockService implements ServiceInterface<Service> {
   }
 
   /**
+   * Gets all the services from the mocked data
+   * @returns a list of service objects
+   */
+  getAll(): Service[] {
+    // returning all services
+    return services;
+  }
+
+  /**
    * Creates a service in the mocked data
    * @param entity the service to be created
    */
