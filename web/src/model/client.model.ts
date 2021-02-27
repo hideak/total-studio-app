@@ -10,7 +10,6 @@ export default class Client implements SortableListItem {
   phone: string;
   birthday: Date | null;
   additionalInfo: string;
-  records: Record[];
 
   /**
    * Constructor
@@ -20,14 +19,12 @@ export default class Client implements SortableListItem {
     name: string,
     phone: string,
     birthday: Date | null,
-    additionalInfo: string,
-    records: Record[]
+    additionalInfo: string
   ) {
     this.id = id;
     this.name = name;
     this.phone = phone;
     this.birthday = birthday;
     this.additionalInfo = additionalInfo;
-    this.records = records;
   }
 }

@@ -22,7 +22,7 @@ export default defineComponent({
   props: {
     record: {
       type: Object as PropType<Record>,
-      default: new Record(0, new Date(), 'Name', 'Details')
+      default: new Record(0, 0, new Date(), 'Name', 'Details')
     }
   },
   setup(props) {

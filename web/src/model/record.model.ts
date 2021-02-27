@@ -3,6 +3,7 @@
  */
 export default class Record {
   id: number;
+  clientId: number;
   date: Date;
   service: string;
   details: string;
@@ -10,8 +11,9 @@ export default class Record {
   /**
    * Constructor
    */
-  constructor(id: number, date: Date, service: string, details: string) {
+  constructor(id: number, clientId: number, date: Date, service: string, details: string) {
     this.id = id;
+    this.clientId = clientId;
     this.date = date;
     this.service = service;
     this.details = details;

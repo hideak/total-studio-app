@@ -15,7 +15,7 @@
       </div>
       <div class="items">
         <ServiceItem
-          v-for="record in client.records"
+          v-for="record in clientRecords"
           :key="record.id"
           :record="record"
         />
@@ -33,6 +33,7 @@ import ServiceItem from '@/components/ServiceItem.vue';
 import AddCircleButton from '@/components/AddCircleButton.vue';
 import EditCircleButton from '@/components/EditCircleButton.vue';
 import ClientMockService from '@/services/client-mock-service.ts';
+import RecordMockService from '@/services/record-mock-service.ts';
 import router from '@/router';
 
 export default defineComponent({
@@ -52,6 +53,10 @@ export default defineComponent({
     const clientService = new ClientMockService();
     const client = clientService.get(clientId);
 
+    // getting associated records
+    const recordService = new RecordMockService();
+    const clientRecords = recordService.getByClientId(clientId);
+
     /**
      * Navigates to the new record screen
      */
@@ -67,7 +72,7 @@ export default defineComponent({
     };
 
     // exposed template variables
-    return { client, recordAddAction, clientEditAction };
+    return { client, clientRecords, recordAddAction, clientEditAction };
   }
 });
 </script>

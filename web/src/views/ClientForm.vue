@@ -133,8 +133,7 @@ export default defineComponent({
         clientName,
         clientPhone,
         clientBirthday,
-        clientAdditionalInfo,
-        []
+        clientAdditionalInfo
       );
     };
 
