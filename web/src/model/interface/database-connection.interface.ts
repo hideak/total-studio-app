@@ -1,6 +1,5 @@
 export default interface DatabaseConnection {
-  database: IDBDatabase;
+  database?: IDBDatabase;
   dbName: string;
   dbVersion: number;
-  dbStore: string;
 }

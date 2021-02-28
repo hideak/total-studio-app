@@ -1,13 +1,14 @@
 import Record from '@/model/record.model';
-import ServiceInterface from './interfaces/service.interface';
+import RecordCreate from '@/model/dto/record-create';
+import ServiceInterface from './shared/service.interface';
 import records from '@/data/records.data';
 
-export default class RecordMockService implements ServiceInterface<Record> {
+export default class RecordMockService implements ServiceInterface<Record, RecordCreate> {
   /**
    * Gets a record from the mocked data
    * @param id the id of the record to get
    */
-  get(id: number): Record {
+  async get(id: number): Promise<Record> {
     // finding the record to get
     const record = records.find((record: Record) => record.id === id);
     if (record === undefined) {
@@ -21,7 +22,7 @@ export default class RecordMockService implements ServiceInterface<Record> {
    * Gets a record based on the client id from the mocked data
    * @param id the id of the client from where to get records
    */
-  getByClientId(id: number): Record[] {
+  async getByClientId(id: number): Promise<Record[]> {
     // finding the records to get
     const filteredRecords = records.filter(
       (record: Record) => record.clientId == id
@@ -37,25 +38,24 @@ export default class RecordMockService implements ServiceInterface<Record> {
    * Creates a record in the mocked data
    * @param entity the record to be created
    */
-  create(entity: Record): Record {
+  async create(entity: RecordCreate): Promise<void> {
     const lastRecordId = Math.max(
       ...records.map((record: Record) => record.id)
     );
 
     // assigning a new id different from the existing ones
-    entity.id = lastRecordId === Math.max() ? 1 : lastRecordId + 1;
+    const newRecord = Object.assign({}, entity) as Record;
+    newRecord.id = lastRecordId === Math.max() ? 1 : lastRecordId + 1;
 
     // pushes the new record
-    records.push(entity);
-
-    return entity;
+    records.push(newRecord);
   }
 
   /**
    * Updates a record in the mocked data
    * @param entity the record to be updated
    */
-  update(entity: Record): Record {
+  async update(entity: Record): Promise<void> {
     // finding the record to update
     const record = records.find((record: Record) => record.id === entity.id);
     if (record === undefined) {
@@ -64,15 +64,13 @@ export default class RecordMockService implements ServiceInterface<Record> {
 
     // updates the record
     Object.assign(record, entity);
-
-    return record;
   }
 
   /**
    * Deletes a record in the mocked data
    * @param id the id of the record to be deleted
    */
-  delete(id: number): void {
+  async delete(id: number): Promise<void> {
     // finding the record to update
     const index = records.findIndex((record: Record) => record.id === id);
     if (index < 0) {

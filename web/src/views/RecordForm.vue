@@ -87,7 +87,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, Ref, ref } from 'vue';
+import { computed, defineComponent, ref } from 'vue';
 import { useRoute } from 'vue-router';
 import { stringToDate, dateToString, timeToString } from '@/util/date-utils';
 import TitleBar from '@/components/TitleBar.vue';
@@ -100,6 +100,9 @@ import ServiceMockService from '@/services/service-mock-service.ts';
 import Record from '@/model/record.model.ts';
 import RecordMockService from '@/services/record-mock-service.ts';
 import router from '@/router';
+import RecordCreate from '@/model/dto/record-create';
+import Service from '@/model/service.model';
+import Client from '@/model/client.model';
 
 export default defineComponent({
   name: 'RecordForm',
@@ -115,7 +118,7 @@ export default defineComponent({
   },
   setup(props) {
     const serviceSelector = ref(null);
-    const serviceId: Ref<number | null> = ref(null);
+    const services = ref();
     const name = ref('');
     const service = ref('');
     const date = ref('');
@@ -147,27 +150,6 @@ export default defineComponent({
     };
 
     /**
-     * Parses the record data and returns a record object
-     * @param id the id of the record being parsed
-     * @returns a new record with the parsed data
-     */
-    const parseData = (id: number, clientId: number): Record => {
-      const recordService = service.value;
-      const recordDate = stringToDate(date.value);
-      const recordTime = time.value;
-      const recordDetails = details.value;
-
-      return new Record(
-        id,
-        clientId,
-        recordService,
-        recordDate,
-        recordTime,
-        recordDetails
-      );
-    };
-
-    /**
      * Gets the current client id from the router parameters
      * @returns the id of the current client
      */
@@ -184,12 +166,52 @@ export default defineComponent({
     };
 
     /**
+     * Parses the record data and returns a record creation DTO
+     * @returns a new record DTO the parsed data
+     */
+    const parseCreateData = (): RecordCreate => {
+      const recordService = service.value;
+      const recordDate = stringToDate(date.value);
+      const recordTime = time.value;
+      const recordDetails = details.value;
+
+      return new RecordCreate(
+        getClientId(),
+        recordService,
+        recordDate,
+        recordTime,
+        recordDetails
+      );
+    };
+
+    /**
+     * Parses the record data and returns a record object
+     * @returns a new record with the parsed data
+     */
+    const parseUpdateData = (): Record => {
+      const recordService = service.value;
+      const recordDate = stringToDate(date.value);
+      const recordTime = time.value;
+      const recordDetails = details.value;
+
+      return new Record(
+        getRecordId(),
+        getClientId(),
+        recordService,
+        recordDate,
+        recordTime,
+        recordDetails
+      );
+    };
+
+    /**
      * Handles the selected service
      * @param id the id of the selected service
      */
     const handleServiceSelection = (id: number) => {
-      serviceId.value = id;
-      service.value = serviceService.get(serviceId.value).name;
+      serviceService.get(id).then((entity: Service) => {
+        service.value = entity.name;
+      });
     };
 
     /**
@@ -209,14 +231,13 @@ export default defineComponent({
       }
 
       // parse data
-      const clientId = getClientId();
-      const newRecord = parseData(0, clientId);
+      const newRecord = parseCreateData();
 
       // create data
-      recordService.create(newRecord);
-
-      // return to records list
-      router.go(-1);
+      recordService.create(newRecord).then(() => {
+        // return to records list
+        router.go(-1);
+      });
     };
 
     /**
@@ -229,15 +250,13 @@ export default defineComponent({
       }
 
       // parse data
-      const clientId = getClientId();
-      const recordId = getRecordId();
-      const editedRecord = parseData(recordId, clientId);
+      const editedRecord = parseUpdateData();
 
       // update data
-      recordService.update(editedRecord);
-
-      // return to records list
-      router.go(-1);
+      recordService.update(editedRecord).then(() => {
+        // return to records list
+        router.go(-1);
+      });
     };
 
     /**
@@ -248,10 +267,10 @@ export default defineComponent({
       const recordId = getRecordId();
 
       // delete data
-      recordService.delete(recordId);
-
-      // return to records list
-      router.go(-1);
+      recordService.delete(recordId).then(() => {
+        // return to records list
+        router.go(-1);
+      });
     };
 
     /**
@@ -266,11 +285,15 @@ export default defineComponent({
     };
 
     // load services
-    const services = serviceService.getAll();
+    serviceService.getAll().then((entities: Service[]) => {
+      services.value = entities;
+    });
 
     // load current client
     const clientId = getClientId();
-    name.value = clientService.get(clientId).name;
+    clientService.get(clientId).then((entity: Client) => {
+      name.value = entity.name;
+    });
 
     // loading information on creation
     if (!props.isEditing) {
@@ -284,13 +307,13 @@ export default defineComponent({
     else {
       // getting the client being edited
       const recordId = getRecordId();
-      const record = recordService.get(recordId);
-
-      // updating fields
-      service.value = record.service;
-      date.value = dateToString(record.date);
-      time.value = record.time;
-      details.value = record.details;
+      recordService.get(recordId).then((record: Record) => {
+        // updating fields
+        service.value = record.service;
+        date.value = dateToString(record.date);
+        time.value = record.time;
+        details.value = record.details;
+      });
     }
 
     // expose template variables

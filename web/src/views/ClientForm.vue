@@ -77,6 +77,7 @@ import InputField from '@/components/InputField.vue';
 import Label from '@/components/Label.vue';
 import Button from '@/components/Button.vue';
 import Client from '@/model/client.model.ts';
+import ClientCreate from '@/model/dto/client-create';
 import ClientMockService from '@/services/client-mock-service.ts';
 import router from '@/router';
 
@@ -96,8 +97,8 @@ export default defineComponent({
     const phone = ref('');
     const birthday = ref('');
     const additionalInfo = ref('');
-    const clientService = new ClientMockService();
     const route = useRoute();
+    const clientService = new ClientMockService();
 
     /**
      * Returns a computed property depending on the edit mode
@@ -118,18 +119,24 @@ export default defineComponent({
     };
 
     /**
-     * Parses the client data and returns a client object
-     * @param id the id of the client being parsed
-     * @returns a new client with the parsed data
+     * Gets the current client id from the router parameters
+     * @returns the id of the current client
      */
-    const parseData = (id: number): Client => {
+    const getClientId = (): number => {
+      return parseInt(route.params.id as string, 10);
+    };
+
+    /**
+     * Parses the client data and returns a client creation DTO
+     * @returns a new client DTO with the parsed data
+     */
+    const parseCreateData = (): ClientCreate => {
       const clientName = name.value;
       const clientPhone = phone.value;
       const clientBirthday = stringToDate(birthday.value);
       const clientAdditionalInfo = additionalInfo.value;
 
-      return new Client(
-        id,
+      return new ClientCreate(
         clientName,
         clientPhone,
         clientBirthday,
@@ -138,11 +145,22 @@ export default defineComponent({
     };
 
     /**
-     * Gets the current client id from the router parameters
-     * @returns the id of the current client
+     * Parses the client data and returns a client object
+     * @returns a new client object with the parsed data
      */
-    const getClientId = (): number => {
-      return parseInt(route.params.id as string, 10);
+    const parseUpdateData = (): Client => {
+      const clientName = name.value;
+      const clientPhone = phone.value;
+      const clientBirthday = stringToDate(birthday.value);
+      const clientAdditionalInfo = additionalInfo.value;
+
+      return new Client(
+        getClientId(),
+        clientName,
+        clientPhone,
+        clientBirthday,
+        clientAdditionalInfo
+      );
     };
 
     /**
@@ -162,13 +180,13 @@ export default defineComponent({
       }
 
       // parse data
-      const newClient = parseData(0);
+      const newClient = parseCreateData();
 
       // create data
-      clientService.create(newClient);
-
-      // return to client list
-      router.go(-1);
+      clientService.create(newClient).then(() => {
+        // return to client list
+        router.go(-1);
+      });
     };
 
     /**
@@ -181,14 +199,13 @@ export default defineComponent({
       }
 
       // parse data
-      const clientId = getClientId();
-      const editedClient = parseData(clientId);
+      const editedClient = parseUpdateData();
 
       // update data
-      clientService.update(editedClient);
-
-      // return to client list
-      router.go(-1);
+      clientService.update(editedClient).then(() => {
+        // return to client list
+        router.go(-1);
+      });
     };
 
     /**
@@ -199,23 +216,23 @@ export default defineComponent({
       const clientId = getClientId();
 
       // delete data
-      clientService.delete(clientId);
-
-      // return to client list
-      router.go(-2);
+      clientService.delete(clientId).then(() => {
+        // return to client list
+        router.go(-2);
+      });
     };
 
     // loading information on edit
     if (props.isEditing) {
       // getting the client being edited
       const clientId = getClientId();
-      const client = clientService.get(clientId);
-
-      // updating fields
-      name.value = client.name;
-      phone.value = client.phone;
-      birthday.value = dateToString(client.birthday);
-      additionalInfo.value = client.additionalInfo;
+      clientService.get(clientId).then((client: Client) => {
+        // updating fields
+        name.value = client.name;
+        phone.value = client.phone;
+        birthday.value = dateToString(client.birthday);
+        additionalInfo.value = client.additionalInfo;
+      });
     }
 
     // expose template variables

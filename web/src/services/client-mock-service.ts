@@ -1,13 +1,15 @@
 import Client from '@/model/client.model';
-import ServiceInterface from './interfaces/service.interface';
+import ClientCreate from '@/model/dto/client-create';
+import ServiceInterface from './shared/service.interface';
 import clients from '@/data/clients.data';
 
-export default class ClientMockService implements ServiceInterface<Client> {
+export default class ClientMockService
+  implements ServiceInterface<Client, ClientCreate> {
   /**
    * Gets a client from the mocked data
    * @param id the id of the client to get
    */
-  get(id: number): Client {
+  async get(id: number): Promise<Client> {
     // finding the client to get
     const client = clients.find((client: Client) => client.id === id);
     if (client === undefined) {
@@ -21,25 +23,24 @@ export default class ClientMockService implements ServiceInterface<Client> {
    * Creates a client in the mocked data
    * @param entity the client to be created
    */
-  create(entity: Client): Client {
+  async create(entity: ClientCreate): Promise<void> {
     const lastClientId = Math.max(
       ...clients.map((client: Client) => client.id)
     );
 
     // assigning a new id different from the existing ones
-    entity.id = lastClientId === Math.max() ? 1 : lastClientId + 1;
+    const newClient = Object.assign({}, entity) as Client;
+    newClient.id = lastClientId === Math.max() ? 1 : lastClientId + 1;
 
     // pushes the new client
-    clients.push(entity);
-
-    return entity;
+    clients.push(newClient);
   }
 
   /**
    * Updates a client in the mocked data
    * @param entity the client to be updated
    */
-  update(entity: Client): Client {
+  async update(entity: Client): Promise<void> {
     // finding the client to update
     const client = clients.find((client: Client) => client.id === entity.id);
     if (client === undefined) {
@@ -48,15 +49,13 @@ export default class ClientMockService implements ServiceInterface<Client> {
 
     // updates the client
     Object.assign(client, entity);
-
-    return client;
   }
 
   /**
    * Deletes a client in the mocked data
    * @param id the id of the client to be deleted
    */
-  delete(id: number): void {
+  async delete(id: number): Promise<void> {
     // finding the client to update
     const index = clients.findIndex((client: Client) => client.id === id);
     if (index < 0) {

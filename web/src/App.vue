@@ -8,9 +8,22 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, provide } from 'vue';
+import { dbConnect } from '@/util/idb.ts';
+import DatabaseConnection from './model/interface/database-connection.interface';
+
 export default defineComponent({
-  name: 'App'
+  name: 'App',
+  setup() {
+    // Connecting to the Indexed DB
+    const dbConnection: DatabaseConnection = {
+      dbName: 'StudioDB',
+      dbVersion: 1
+    };
+
+    dbConnect(dbConnection).then();
+    provide('dbConnection', dbConnection);
+  }
 });
 </script>
 

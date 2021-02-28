@@ -59,6 +59,7 @@ import Button from '@/components/Button.vue';
 import Service from '@/model/service.model.ts';
 import ServiceMockService from '@/services/service-mock-service.ts';
 import router from '@/router';
+import ServiceCreate from '@/model/dto/service-create';
 
 export default defineComponent({
   name: 'ServiceForm',
@@ -74,8 +75,8 @@ export default defineComponent({
   setup(props) {
     const name = ref('');
     const details = ref('');
-    const serviceService = new ServiceMockService();
     const route = useRoute();
+    const serviceService = new ServiceMockService();
 
     /**
      * Returns a computed property depending on the edit mode
@@ -96,23 +97,33 @@ export default defineComponent({
     };
 
     /**
-     * Parses the service data and returns a service object
-     * @param id the id of the service being parsed
-     * @returns a new service with the parsed data
-     */
-    const parseData = (id: number): Service => {
-      const serviceName = name.value;
-      const serviceDetails = details.value;
-
-      return new Service(id, serviceName, serviceDetails);
-    };
-
-    /**
      * Gets the current service id from the router parameters
      * @returns the id of the current service
      */
     const getServiceId = (): number => {
       return parseInt(route.params.id as string, 10);
+    };
+
+    /**
+     * Parses the service data and returns a service creation DTO
+     * @returns a new service DTO the parsed data
+     */
+    const parseCreateData = (): ServiceCreate => {
+      const serviceName = name.value;
+      const serviceDetails = details.value;
+
+      return new ServiceCreate(serviceName, serviceDetails);
+    };
+
+    /**
+     * Parses the service data and returns a service object
+     * @returns a new service object with the parsed data
+     */
+    const parseUpdateData = (): Service => {
+      const serviceName = name.value;
+      const serviceDetails = details.value;
+
+      return new Service(getServiceId(), serviceName, serviceDetails);
     };
 
     /**
@@ -133,13 +144,13 @@ export default defineComponent({
       }
 
       // parse data
-      const newService = parseData(0);
+      const newService = parseCreateData();
 
       // create data
-      serviceService.create(newService);
-
-      // return to service list
-      router.go(-1);
+      serviceService.create(newService).then(() => {
+        // return to service list
+        router.go(-1);
+      });
     };
 
     /**
@@ -152,14 +163,13 @@ export default defineComponent({
       }
 
       // parse data
-      const serviceId = getServiceId();
-      const editedService = parseData(serviceId);
+      const editedService = parseUpdateData();
 
       // update data
-      serviceService.update(editedService);
-
-      // return to service list
-      router.go(-1);
+      serviceService.update(editedService).then(() => {
+        // return to service list
+        router.go(-1);
+      });
     };
 
     /**
@@ -170,21 +180,21 @@ export default defineComponent({
       const serviceId = getServiceId();
 
       // delete data
-      serviceService.delete(serviceId);
-
-      // return to service list
-      router.go(-1);
+      serviceService.delete(serviceId).then(() => {
+        // return to service list
+        router.go(-1);
+      });
     };
 
     // loading information on edit
     if (props.isEditing) {
       // getting the service being edited
       const serviceId = getServiceId();
-      const service = serviceService.get(serviceId);
-
-      // updating fields
-      name.value = service.name;
-      details.value = service.details;
+      serviceService.get(serviceId).then((service: Service) => {
+        // updating fields
+        name.value = service.name;
+        details.value = service.details;
+      });
     }
 
     // expose template variables

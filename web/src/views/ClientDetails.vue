@@ -6,7 +6,7 @@
     />
     <div class="content">
       <div class="name">
-        {{ client.name }}
+        {{ client ? client.name : '' }}
         <EditCircleButton @click="clientEditAction" />
       </div>
       <div class="services">
@@ -27,13 +27,15 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, ref } from 'vue';
 import { useRoute } from 'vue-router';
 import TitleBar from '@/components/TitleBar.vue';
 import ServiceItem from '@/components/ServiceItem.vue';
 import AddCircleButton from '@/components/AddCircleButton.vue';
 import EditCircleButton from '@/components/EditCircleButton.vue';
+import Client from '@/model/client.model';
 import ClientMockService from '@/services/client-mock-service.ts';
+import Record from '@/model/record.model';
 import RecordMockService from '@/services/record-mock-service.ts';
 import router from '@/router';
 
@@ -46,17 +48,25 @@ export default defineComponent({
     EditCircleButton
   },
   setup() {
-    // getting the id of the client
+    const client = ref();
+    const clientRecords = ref();
+    const clientService = new ClientMockService();
+    const recordService = new RecordMockService();
     const route = useRoute();
+
+    // getting the id of the client
     const clientId = parseInt(route.params.id as string, 10);
 
-    // getting the client object
-    const clientService = new ClientMockService();
-    const client = clientService.get(clientId);
-
-    // getting associated records
-    const recordService = new RecordMockService();
-    const clientRecords = recordService.getByClientId(clientId);
+    // getting the client object and associated records
+    clientService
+      .get(clientId)
+      .then((entity: Client) => {
+        client.value = entity;
+        return recordService.getByClientId(entity.id);
+      })
+      .then((entities: Record[]) => {
+        clientRecords.value = entities;
+      });
 
     /**
      * Navigates to the new record screen
