@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/precache-manifest.5f2d0de8b4190e5b99f04267588e215e.js"
+  "/precache-manifest.cce94cdadc6e9dae69c0794103c10d6e.js"
 );
 
 workbox.core.setCacheNameDetails({prefix: "total-studio-app"});
