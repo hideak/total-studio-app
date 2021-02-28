@@ -3,7 +3,8 @@ import ServiceCreate from '@/model/dto/service-create';
 import ServiceInterface from './shared/service.interface';
 import services from '@/data/services.data';
 
-export default class ServiceMockService implements ServiceInterface<Service, ServiceCreate> {
+export default class ServiceMockService
+  implements ServiceInterface<Service, ServiceCreate> {
   /**
    * Gets a service from the mocked data
    * @param id the id of the service to get

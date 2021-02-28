@@ -3,7 +3,8 @@ import RecordCreate from '@/model/dto/record-create';
 import ServiceInterface from './shared/service.interface';
 import records from '@/data/records.data';
 
-export default class RecordMockService implements ServiceInterface<Record, RecordCreate> {
+export default class RecordMockService
+  implements ServiceInterface<Record, RecordCreate> {
   /**
    * Gets a record from the mocked data
    * @param id the id of the record to get
