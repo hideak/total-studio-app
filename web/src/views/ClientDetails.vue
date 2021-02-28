@@ -18,10 +18,11 @@
           v-for="record in clientRecords"
           :key="record.id"
           :record="record"
+          @click="recordItemAction(record.id)"
         />
       </div>
     </div>
-    <AddCircleButton @click="recordAddAction" />
+    <AddCircleButton @click="recordAddAction()" />
   </div>
 </template>
 
@@ -61,7 +62,17 @@ export default defineComponent({
      * Navigates to the new record screen
      */
     const recordAddAction = (): void => {
-      router.push({ name: 'NewRecord', params: { id: clientId } });
+      router.push({ name: 'NewRecord', params: { clientId: clientId } });
+    };
+
+    /**
+     * Navigates to the edit record screen
+     */
+    const recordItemAction = (recordId: number): void => {
+      router.push({
+        name: 'EditRecord',
+        params: { clientId: clientId, recordId: recordId }
+      });
     };
 
     /**
@@ -72,7 +83,13 @@ export default defineComponent({
     };
 
     // exposed template variables
-    return { client, clientRecords, recordAddAction, clientEditAction };
+    return {
+      client,
+      clientRecords,
+      recordAddAction,
+      recordItemAction,
+      clientEditAction
+    };
   }
 });
 </script>

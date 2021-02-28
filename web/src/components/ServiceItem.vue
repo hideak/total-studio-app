@@ -22,7 +22,7 @@ export default defineComponent({
   props: {
     record: {
       type: Object as PropType<Record>,
-      default: new Record(0, 0, new Date(), 'Name', 'Details')
+      default: new Record(0, 0, 'Name', new Date(), '00:00', 'Details')
     }
   },
   setup(props) {
@@ -30,6 +30,10 @@ export default defineComponent({
      * Converts the date property to a readable string
      */
     const computedDate = computed(() => {
+      if (!props.record.date) {
+        return 'Sem informação de data';
+      }
+
       // getting the year as a string
       const year = props.record.date.getFullYear().toString();
 
@@ -41,20 +45,17 @@ export default defineComponent({
       const rawDay = props.record.date.getDate().toString();
       const day = rawDay.length == 1 ? `0${rawDay}` : rawDay;
 
-      // getting the hour as a string
-      const rawHour = props.record.date.getHours().toString();
-      const hour = rawHour.length == 1 ? `0${rawHour}` : rawHour;
-
-      // getting the minute as a string
-      const rawMinute = props.record.date.getMinutes().toString();
-      const minute = rawMinute.length == 1 ? `0${rawMinute}` : rawMinute;
+      // getting the hour and minute as a string
+      const hourAndMinute = props.record.time
+        ? props.record.time
+        : 'Sem horário';
 
       // getting the day of the week
       const weekDays = ['dom', 'seg', 'ter', 'qua', 'qui', 'sex', 'sáb'];
       const weekDay = weekDays[props.record.date.getDay()];
 
       // returning formatted date
-      return `${day}/${month}/${year} (${weekDay}) @ ${hour}:${minute}`;
+      return `${day}/${month}/${year} (${weekDay}) @ ${hourAndMinute}`;
     });
 
     // expose template variables

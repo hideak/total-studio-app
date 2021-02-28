@@ -6,6 +6,8 @@
       :value="modelValue"
       :placeholder="placeholder"
       :disabled="disabled"
+      :inputmode="inputMode"
+      :maxlength="maxLength"
       @input="inputHandler"
     />
     <img v-if="hasIcon" :src="icon" alt="Search icon" />
@@ -23,7 +25,9 @@ export default defineComponent({
     placeholder: { type: String, default: '' },
     hasIcon: { type: Boolean, default: false },
     icon: { type: String },
-    disabled: { type: Boolean, default: false }
+    disabled: { type: Boolean, default: false },
+    inputMode: { type: String, default: '' },
+    maxLength: { type: String, default: '' }
   },
   emits: ['update:modelValue'],
   setup(props, context) {

@@ -44,4 +44,27 @@ function stringToDate(date: string): Date | null {
   }
 }
 
-export { dateToString, stringToDate };
+/**
+ * Returns a date as a string in the HH:MM format
+ * @param date the date to be converted
+ * @returns a string representing the time
+ */
+function timeToString(date: Date | null): string {
+  // checking if the date is valid
+  if (!date) {
+    return '';
+  }
+
+  // getting the hour as a string
+  const rawHour = date.getHours().toString();
+  const hour = rawHour.length == 1 ? `0${rawHour}` : rawHour;
+
+  // getting the hour as a string
+  const rawMinute = date.getMinutes().toString();
+  const minute = rawMinute.length == 1 ? `0${rawMinute}` : rawMinute;
+
+  // returning formatted date
+  return `${hour}:${minute}`;
+}
+
+export { dateToString, stringToDate, timeToString };

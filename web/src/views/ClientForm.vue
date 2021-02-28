@@ -48,14 +48,14 @@
         <Button
           v-if="!isEditing"
           isAlternativeColor
-          label="Salvar cliente"
+          label="Salvar Cliente"
           @click="saveAction"
         />
         <Button v-if="!isEditing" label="Cancelar" @click="cancelAction" />
         <Button
           v-if="isEditing"
           isAlternativeColor
-          label="Salvar cliente"
+          label="Salvar Cliente"
           @click="editAction"
         />
         <Button

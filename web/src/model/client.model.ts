@@ -1,5 +1,4 @@
 import SortableListItem from './interface/sortable-list-item.interface';
-import Record from './record.model';
 
 /**
  * Class that represents a client

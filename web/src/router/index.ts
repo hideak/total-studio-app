@@ -34,13 +34,14 @@ const routes: Array<RouteRecordRaw> = [
     component: ClientForm
   },
   {
-    path: '/clients/:id/records/new',
+    path: '/clients/:clientId/records/new',
     name: 'NewRecord',
     component: RecordForm
   },
   {
     path: '/clients/:clientId/records/:recordId',
     name: 'EditRecord',
+    props: { isEditing: true },
     component: RecordForm
   },
   {

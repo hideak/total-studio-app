@@ -23,7 +23,9 @@ export default class RecordMockService implements ServiceInterface<Record> {
    */
   getByClientId(id: number): Record[] {
     // finding the records to get
-    const filteredRecords = records.filter((record: Record) => record.clientId == id);
+    const filteredRecords = records.filter(
+      (record: Record) => record.clientId == id
+    );
     if (filteredRecords === undefined) {
       throw new Error(`records not found with client id ${id}`);
     }

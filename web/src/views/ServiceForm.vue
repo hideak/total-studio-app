@@ -29,19 +29,19 @@
         <Button
           v-if="!isEditing"
           isAlternativeColor
-          label="Salvar serviço"
+          label="Salvar Serviço"
           @click="saveAction"
         />
         <Button v-if="!isEditing" label="Cancelar" @click="cancelAction" />
         <Button
           v-if="isEditing"
           isAlternativeColor
-          label="Salvar serviço"
+          label="Salvar Serviço"
           @click="editAction"
         />
         <Button
           v-if="isEditing"
-          label="Excluir serviço"
+          label="Excluir Serviço"
           @click="deleteAction"
         />
       </div>
