@@ -69,7 +69,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, ref } from 'vue';
+import { computed, defineComponent, inject, ref } from 'vue';
 import { useRoute } from 'vue-router';
 import { stringToDate, dateToString } from '@/util/date-utils.ts';
 import TitleBar from '@/components/TitleBar.vue';
@@ -78,7 +78,8 @@ import Label from '@/components/Label.vue';
 import Button from '@/components/Button.vue';
 import Client from '@/model/client.model.ts';
 import ClientCreate from '@/model/dto/client-create';
-import ClientMockService from '@/services/client-mock-service.ts';
+import DatabaseConnection from '@/model/interface/database-connection.interface';
+import GenericService from '@/services/shared/generic-service';
 import router from '@/router';
 
 export default defineComponent({
@@ -98,7 +99,13 @@ export default defineComponent({
     const birthday = ref('');
     const additionalInfo = ref('');
     const route = useRoute();
-    const clientService = new ClientMockService();
+
+    // initializing database
+    const db: DatabaseConnection = inject('dbConnection') as DatabaseConnection;
+    const clientService = new GenericService<Client, ClientCreate>(
+      db,
+      'clients'
+    );
 
     /**
      * Returns a computed property depending on the edit mode

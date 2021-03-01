@@ -87,7 +87,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, ref } from 'vue';
+import { computed, defineComponent, inject, ref } from 'vue';
 import { useRoute } from 'vue-router';
 import { stringToDate, dateToString, timeToString } from '@/util/date-utils';
 import TitleBar from '@/components/TitleBar.vue';
@@ -95,14 +95,16 @@ import InputField from '@/components/InputField.vue';
 import Label from '@/components/Label.vue';
 import Button from '@/components/Button.vue';
 import ListSelector from '@/components/ListSelector.vue';
-import ClientMockService from '@/services/client-mock-service.ts';
-import ServiceMockService from '@/services/service-mock-service.ts';
 import Record from '@/model/record.model.ts';
-import RecordMockService from '@/services/record-mock-service.ts';
-import router from '@/router';
 import RecordCreate from '@/model/dto/record-create';
 import Service from '@/model/service.model';
+import ServiceCreate from '@/model/dto/service-create';
+import RecordService from '@/services/record-service';
 import Client from '@/model/client.model';
+import ClientCreate from '@/model/dto/client-create';
+import DatabaseConnection from '@/model/interface/database-connection.interface';
+import GenericService from '@/services/shared/generic-service';
+import router from '@/router';
 
 export default defineComponent({
   name: 'RecordForm',
@@ -125,9 +127,18 @@ export default defineComponent({
     const time = ref('');
     const details = ref('');
     const route = useRoute();
-    const clientService = new ClientMockService();
-    const serviceService = new ServiceMockService();
-    const recordService = new RecordMockService();
+
+    // initializing database
+    const db: DatabaseConnection = inject('dbConnection') as DatabaseConnection;
+    const recordService = new RecordService(db, 'records');
+    const clientService = new GenericService<Client, ClientCreate>(
+      db,
+      'clients'
+    );
+    const serviceService = new GenericService<Service, ServiceCreate>(
+      db,
+      'services'
+    );
 
     /**
      * Returns a computed property depending on the edit mode

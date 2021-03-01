@@ -6,7 +6,6 @@
       :icon="require('@/assets/img/search-solid.svg')"
       :placeholder="searchPlaceholder"
       v-model="searchValue"
-      @update:modelValue="filterContent"
     />
     <div class="items">
       <ListItem
@@ -21,7 +20,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, PropType } from 'vue';
+import { defineComponent, ref, PropType, computed } from 'vue';
 import AddCircleButton from '@/components/AddCircleButton.vue';
 import ListItem from '@/components/ListItem.vue';
 import TitleBar from '@/components/TitleBar.vue';
@@ -46,20 +45,16 @@ export default defineComponent({
   },
   setup(props) {
     const searchValue = ref('');
-    const filteredItems = ref(props.items);
 
-    /**
-     * Filters the content based on the query string in the search field
-     */
-    const filterContent = (): void => {
-      filteredItems.value = props.items.filter((item: SortableListItem) => {
+    const filteredItems = computed(() => {
+      return props.items.filter((item: SortableListItem) => {
         return item.name
           .toLowerCase()
           .includes(searchValue.value.toLowerCase());
       });
-    };
+    });
 
-    return { searchValue, filteredItems, filterContent };
+    return { searchValue, filteredItems };
   }
 });
 </script>

@@ -76,6 +76,35 @@ async function dbGet<T>(
 }
 
 /**
+ * Retrieves all items from a store in the database
+ * @param db the database to use
+ * @param store the store where the data will be retrieved
+ */
+async function dbGetAll<T>(
+  db: DatabaseConnection,
+  store: string
+): Promise<T[]> {
+  return new Promise((resolve, reject) => {
+    const request = db.database
+      ?.transaction(store)
+      .objectStore(store)
+      .getAll();
+
+    if (request) {
+      // Success callback
+      request.onsuccess = () => {
+        resolve(request.result);
+      };
+
+      // Error callback
+      request.onerror = (error: Event) => {
+        reject(error);
+      };
+    }
+  });
+}
+
+/**
  * Creates an item from a store in the database
  * @param db the database to use
  * @param store the store where the data will be created
@@ -168,4 +197,4 @@ async function dbDelete<T>(
   });
 }
 
-export { dbConnect, dbGet, dbCreate, dbUpdate, dbDelete };
+export { dbConnect, dbGet, dbGetAll, dbCreate, dbUpdate, dbDelete };

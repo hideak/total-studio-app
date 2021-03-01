@@ -12,9 +12,12 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, inject, ref } from 'vue';
 import ScrollableList from '@/components/ScrollableList.vue';
-import clients from '@/data/clients.data.ts';
+import DatabaseConnection from '@/model/interface/database-connection.interface';
+import GenericService from '@/services/shared/generic-service';
+import ClientCreate from '@/model/dto/client-create';
+import Client from '@/model/client.model';
 import router from '@/router';
 
 export default defineComponent({
@@ -23,6 +26,20 @@ export default defineComponent({
     ScrollableList
   },
   setup() {
+    const clients = ref();
+
+    // initializing database
+    const db: DatabaseConnection = inject('dbConnection') as DatabaseConnection;
+    const clientService = new GenericService<Client, ClientCreate>(
+      db,
+      'clients'
+    );
+
+    // get client data
+    clientService.getAll().then((entities: Client[]) => {
+      clients.value = entities;
+    });
+
     /**
      * Navigates to the new client screen
      */

@@ -1,18 +1,18 @@
 import ServiceInterface from './service.interface';
 import DatabaseConnection from '@/model/interface/database-connection.interface';
-import { dbGet, dbCreate, dbUpdate, dbDelete } from '@/util/idb.ts';
+import { dbGet, dbGetAll, dbCreate, dbUpdate, dbDelete } from '@/util/idb.ts';
 
 export default class GenericService<Entity, EntityCreate>
   implements ServiceInterface<Entity, EntityCreate> {
   /**
    * The name of the store from where to get data
    */
-  private store: string;
+  store: string;
 
   /**
    * The database connection
    */
-  private db: DatabaseConnection;
+  db: DatabaseConnection;
 
   /**
    * Constructor
@@ -28,6 +28,13 @@ export default class GenericService<Entity, EntityCreate>
    */
   async get(id: number): Promise<Entity> {
     return dbGet(this.db, this.store, id).then();
+  }
+
+  /**
+   * Gets all entities from the database
+   */
+  async getAll(): Promise<Entity[]> {
+    return dbGetAll(this.db, this.store).then();
   }
 
   /**

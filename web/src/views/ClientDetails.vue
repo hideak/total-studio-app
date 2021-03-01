@@ -27,16 +27,18 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue';
+import { defineComponent, inject, ref } from 'vue';
 import { useRoute } from 'vue-router';
 import TitleBar from '@/components/TitleBar.vue';
 import ServiceItem from '@/components/ServiceItem.vue';
 import AddCircleButton from '@/components/AddCircleButton.vue';
 import EditCircleButton from '@/components/EditCircleButton.vue';
 import Client from '@/model/client.model';
-import ClientMockService from '@/services/client-mock-service.ts';
+import ClientCreate from '@/model/dto/client-create';
 import Record from '@/model/record.model';
-import RecordMockService from '@/services/record-mock-service.ts';
+import RecordService from '@/services/record-service';
+import DatabaseConnection from '@/model/interface/database-connection.interface';
+import GenericService from '@/services/shared/generic-service';
 import router from '@/router';
 
 export default defineComponent({
@@ -50,9 +52,15 @@ export default defineComponent({
   setup() {
     const client = ref();
     const clientRecords = ref();
-    const clientService = new ClientMockService();
-    const recordService = new RecordMockService();
     const route = useRoute();
+
+    // initializing database
+    const db: DatabaseConnection = inject('dbConnection') as DatabaseConnection;
+    const recordService = new RecordService(db, 'records');
+    const clientService = new GenericService<Client, ClientCreate>(
+      db,
+      'clients'
+    );
 
     // getting the id of the client
     const clientId = parseInt(route.params.id as string, 10);

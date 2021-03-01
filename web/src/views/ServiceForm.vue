@@ -50,16 +50,17 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, ref } from 'vue';
+import { computed, defineComponent, inject, ref } from 'vue';
 import { useRoute } from 'vue-router';
 import TitleBar from '@/components/TitleBar.vue';
 import InputField from '@/components/InputField.vue';
 import Label from '@/components/Label.vue';
 import Button from '@/components/Button.vue';
-import Service from '@/model/service.model.ts';
-import ServiceMockService from '@/services/service-mock-service.ts';
-import router from '@/router';
 import ServiceCreate from '@/model/dto/service-create';
+import GenericService from '@/services/shared/generic-service';
+import DatabaseConnection from '@/model/interface/database-connection.interface';
+import Service from '@/model/service.model.ts';
+import router from '@/router';
 
 export default defineComponent({
   name: 'ServiceForm',
@@ -76,7 +77,13 @@ export default defineComponent({
     const name = ref('');
     const details = ref('');
     const route = useRoute();
-    const serviceService = new ServiceMockService();
+
+    // initializing database
+    const db: DatabaseConnection = inject('dbConnection') as DatabaseConnection;
+    const serviceService = new GenericService<Service, ServiceCreate>(
+      db,
+      'services'
+    );
 
     /**
      * Returns a computed property depending on the edit mode
