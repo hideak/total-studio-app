@@ -1,7 +1,7 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "542cfcef6c7155d1d679",
-    "url": "/css/app.045387e3.css"
+    "revision": "73414a8122c2994240ed",
+    "url": "/css/app.9f732ca9.css"
   },
   {
     "revision": "11eabca2251325cfc5589c9c6fb57b46",
@@ -44,6 +44,10 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/img/info-circle-solid.f8b35438.svg"
   },
   {
+    "revision": "f3efbe138f7d8c1e6e3b50ff300ad86e",
+    "url": "/img/map-marked-alt-solid.f3efbe13.svg"
+  },
+  {
     "revision": "e203089a7bc113a1f27cf00163e6b2a9",
     "url": "/img/pen-solid.e203089a.svg"
   },
@@ -64,12 +68,12 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/img/user-friends-solid.55645753.svg"
   },
   {
-    "revision": "a53e11f839446c0acc63fed2bf71df4a",
+    "revision": "d9cf7a552d3345cfb4c0d536209d9489",
     "url": "/index.html"
   },
   {
-    "revision": "542cfcef6c7155d1d679",
-    "url": "/js/app.d9ca8868.js"
+    "revision": "73414a8122c2994240ed",
+    "url": "/js/app.ad155237.js"
   },
   {
     "revision": "507337539b7317c51168",
