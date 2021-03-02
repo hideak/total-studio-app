@@ -25,6 +25,16 @@
       </div>
       <div class="input-group">
         <Label
+          label="Endereço"
+          :src="require('@/assets/img/map-marked-alt-solid.svg')"
+        />
+        <InputField
+          placeholder="Digite o endereço do cliente..."
+          v-model="address"
+        />
+      </div>
+      <div class="input-group">
+        <Label
           label="Aniversário"
           :src="require('@/assets/img/birthday-cake-solid.svg')"
         />
@@ -96,6 +106,7 @@ export default defineComponent({
   setup(props) {
     const name = ref('');
     const phone = ref('');
+    const address = ref('');
     const birthday = ref('');
     const additionalInfo = ref('');
     const route = useRoute();
@@ -140,12 +151,14 @@ export default defineComponent({
     const parseCreateData = (): ClientCreate => {
       const clientName = name.value;
       const clientPhone = phone.value;
+      const clientAddress = address.value;
       const clientBirthday = stringToDate(birthday.value);
       const clientAdditionalInfo = additionalInfo.value;
 
       return new ClientCreate(
         clientName,
         clientPhone,
+        clientAddress,
         clientBirthday,
         clientAdditionalInfo
       );
@@ -158,6 +171,7 @@ export default defineComponent({
     const parseUpdateData = (): Client => {
       const clientName = name.value;
       const clientPhone = phone.value;
+      const clientAddress = address.value;
       const clientBirthday = stringToDate(birthday.value);
       const clientAdditionalInfo = additionalInfo.value;
 
@@ -165,6 +179,7 @@ export default defineComponent({
         getClientId(),
         clientName,
         clientPhone,
+        clientAddress,
         clientBirthday,
         clientAdditionalInfo
       );
@@ -237,6 +252,7 @@ export default defineComponent({
         // updating fields
         name.value = client.name;
         phone.value = client.phone;
+        address.value = client.address;
         birthday.value = dateToString(client.birthday);
         additionalInfo.value = client.additionalInfo;
       });
@@ -246,6 +262,7 @@ export default defineComponent({
     return {
       name,
       phone,
+      address,
       birthday,
       additionalInfo,
       header,
