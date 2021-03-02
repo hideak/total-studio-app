@@ -1,7 +1,7 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "2a6a7b9ab8ccb2c92caa",
-    "url": "/css/app.ac475583.css"
+    "revision": "93835566c9bfe62e5f5b",
+    "url": "/css/app.bf5da465.css"
   },
   {
     "revision": "11eabca2251325cfc5589c9c6fb57b46",
@@ -34,6 +34,10 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
     "revision": "54483259b237317ac00c3b416dc3acdd",
     "url": "/img/cut-solid.54483259.svg"
+  },
+  {
+    "revision": "7e6631da1cd8f1e4f52c0940ba9cc73b",
+    "url": "/img/dollar-sign-solid.7e6631da.svg"
   },
   {
     "revision": "f8b35438941dc848c0e0522bca65a8ca",
@@ -72,12 +76,12 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/img/user-friends-solid.55645753.svg"
   },
   {
-    "revision": "bb541f94d0ef668ccbbb9817763c772d",
+    "revision": "44657512a59059d0da8824bc814a0527",
     "url": "/index.html"
   },
   {
-    "revision": "2a6a7b9ab8ccb2c92caa",
-    "url": "/js/app.d021b57f.js"
+    "revision": "93835566c9bfe62e5f5b",
+    "url": "/js/app.3d0a12aa.js"
   },
   {
     "revision": "054a70e5431b3b66c92f",
