@@ -18,13 +18,21 @@
       <div class="input-group">
         <Label label="Serviço" :src="require('@/assets/img/cut-solid.svg')" />
         <InputField
-          placeholder="Selecione um serviço..."
-          v-model="service"
+          placeholder="Adicionar Serviço"
           disabled
           hasIcon
-          :icon="require('@/assets/img/chevron-down-solid.svg')"
-          @click="serviceSelector.open()"
+          :icon="require('@/assets/img/plus-circle-solid.svg')"
+          @click="handleServiceEntryOpen"
         />
+        <ListItem
+          v-for="serviceEntry in serviceEntries"
+          :key="serviceEntry.id"
+          :content="serviceEntry.name"
+          :sideContent="`R$ ${serviceEntry.price.toFixed(2).replace('.', ',')}`"
+          :deleteAction="() => handleServiceEntryDelete(serviceEntry.id)"
+          hasDeleteIcon
+        />
+        <ListItem content="Total (R$)" :sideContent="total" />
       </div>
       <div class="input-group">
         <Label
@@ -78,7 +86,7 @@
         />
       </div>
     </div>
-    <ListSelector
+    <ServiceSelector
       ref="serviceSelector"
       :items="services"
       @selected="handleServiceSelection"
@@ -87,14 +95,15 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, inject, ref } from 'vue';
+import { computed, defineComponent, inject, Ref, ref } from 'vue';
 import { useRoute } from 'vue-router';
 import { stringToDate, dateToString, timeToString } from '@/util/date-utils';
 import TitleBar from '@/components/TitleBar.vue';
 import InputField from '@/components/InputField.vue';
 import Label from '@/components/Label.vue';
 import Button from '@/components/Button.vue';
-import ListSelector from '@/components/ListSelector.vue';
+import ServiceSelector from '@/components/ServiceSelector.vue';
+import ListItem from '@/components/ListItem.vue';
 import Record from '@/model/record.model.ts';
 import RecordCreate from '@/model/dto/record-create';
 import Service from '@/model/service.model';
@@ -104,6 +113,7 @@ import Client from '@/model/client.model';
 import ClientCreate from '@/model/dto/client-create';
 import DatabaseConnection from '@/model/interface/database-connection.interface';
 import GenericService from '@/services/shared/generic-service';
+import ServiceEntry from '@/model/service-entry.model';
 import router from '@/router';
 
 export default defineComponent({
@@ -113,16 +123,17 @@ export default defineComponent({
     InputField,
     Label,
     Button,
-    ListSelector
+    ServiceSelector,
+    ListItem
   },
   props: {
     isEditing: { type: Boolean, default: false }
   },
   setup(props) {
-    const serviceSelector = ref(null);
+    const serviceSelector = ref();
     const services = ref();
     const name = ref('');
-    const service = ref('');
+    const serviceEntries: Ref<ServiceEntry[]> = ref([]);
     const date = ref('');
     const time = ref('');
     const details = ref('');
@@ -150,11 +161,21 @@ export default defineComponent({
     });
 
     /**
+     * Returns the computed total price of all the service entries
+     */
+    const total = computed(() => {
+      const result = serviceEntries.value
+        .map((serviceEntry: ServiceEntry) => serviceEntry.price)
+        .reduce((previous, current) => previous + current, 0);
+      return `R$ ${result.toFixed(2).replace('.', ',')}`;
+    });
+
+    /**
      * Validates the input data before persisting
      */
     const validateData = (): boolean => {
-      if (!service.value) {
-        window.alert('Escolha um serviço válido para o cliente.');
+      if (serviceEntries.value.length === 0) {
+        window.alert('Adicione pelo menos um serviço válido para o cliente.');
         return false;
       }
       return true;
@@ -181,14 +202,16 @@ export default defineComponent({
      * @returns a new record DTO the parsed data
      */
     const parseCreateData = (): RecordCreate => {
-      const recordService = service.value;
+      const recordServices = JSON.parse(
+        JSON.stringify(serviceEntries.value)
+      ) as ServiceEntry[];
       const recordDate = stringToDate(date.value);
       const recordTime = time.value;
       const recordDetails = details.value;
 
       return new RecordCreate(
         getClientId(),
-        recordService,
+        recordServices,
         recordDate,
         recordTime,
         recordDetails
@@ -200,7 +223,9 @@ export default defineComponent({
      * @returns a new record with the parsed data
      */
     const parseUpdateData = (): Record => {
-      const recordService = service.value;
+      const recordServices = JSON.parse(
+        JSON.stringify(serviceEntries.value)
+      ) as ServiceEntry[];
       const recordDate = stringToDate(date.value);
       const recordTime = time.value;
       const recordDetails = details.value;
@@ -208,7 +233,7 @@ export default defineComponent({
       return new Record(
         getRecordId(),
         getClientId(),
-        recordService,
+        recordServices,
         recordDate,
         recordTime,
         recordDetails
@@ -216,13 +241,44 @@ export default defineComponent({
     };
 
     /**
+     * Gets the value of the id of a possible new service entry to be added
+     * @returns the desired id to be attached to a new service entry
+     */
+    const getNewServiceId = (): number => {
+      const maxValue = Math.max(
+        ...serviceEntries.value.map(
+          (serviceEntry: ServiceEntry) => serviceEntry.id
+        )
+      );
+      return maxValue === Math.max() ? 1 : maxValue + 1;
+    };
+
+    /**
+     * Handles the open operation of the service selector
+     */
+    const handleServiceEntryOpen = (): void => {
+      serviceSelector.value.open(getNewServiceId());
+    };
+
+    /**
      * Handles the selected service
      * @param id the id of the selected service
      */
-    const handleServiceSelection = (id: number) => {
-      serviceService.get(id).then((entity: Service) => {
-        service.value = entity.name;
-      });
+    const handleServiceSelection = (serviceEntry: ServiceEntry): void => {
+      serviceEntries.value.push(serviceEntry);
+    };
+
+    /**
+     * Handles the deletion of a service entry
+     * @param id the id of the service entry to delete
+     */
+    const handleServiceEntryDelete = (id: number) => {
+      const index = serviceEntries.value.findIndex(
+        (serviceEntry: ServiceEntry) => {
+          return serviceEntry.id === id;
+        }
+      );
+      serviceEntries.value.splice(index, 1);
     };
 
     /**
@@ -320,7 +376,7 @@ export default defineComponent({
       const recordId = getRecordId();
       recordService.get(recordId).then((record: Record) => {
         // updating fields
-        service.value = record.service;
+        serviceEntries.value = record.services;
         date.value = dateToString(record.date);
         time.value = record.time;
         details.value = record.details;
@@ -331,13 +387,16 @@ export default defineComponent({
     return {
       header,
       name,
-      service,
+      serviceEntries,
       date,
       time,
       details,
       serviceSelector,
       services,
+      total,
+      handleServiceEntryOpen,
       handleServiceSelection,
+      handleServiceEntryDelete,
       cancelAction,
       saveAction,
       editAction,

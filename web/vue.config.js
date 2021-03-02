@@ -8,8 +8,7 @@ module.exports = {
     msTileColor: '#fafafa',
     manifestOptions: {
       short_name: 'Total Studio App',
-      background_color: '#fafafa',
-      display: 'minimal-ui'
+      background_color: '#fafafa'
     }
   },
   configureWebpack: {

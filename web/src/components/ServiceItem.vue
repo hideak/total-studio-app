@@ -1,13 +1,29 @@
 <template>
   <div class="service-item">
-    <div class="date">
-      <div class="circle"></div>
-      {{ computedDate }}
+    <div class="top">
+      <div class="left">
+        <div class="circle"></div>
+        {{ computedDate }}
+      </div>
+      <div class="right">
+        {{ computedTotal }}
+      </div>
     </div>
-    <div class="service">
-      {{ record.service }}
+    <div class="services">
+      <div
+        v-for="serviceEntry of record.services"
+        :key="serviceEntry.id"
+        class="service"
+      >
+        <div class="left">
+          {{ serviceEntry.name }}
+        </div>
+        <div class="right">
+          {{ `R$ ${serviceEntry.price.toFixed(2).replace('.', ',')}` }}
+        </div>
+      </div>
     </div>
-    <div class="details">
+    <div v-if="record.details" class="details">
       {{ record.details }}
     </div>
   </div>
@@ -16,13 +32,14 @@
 <script lang="ts">
 import { computed, defineComponent, PropType } from 'vue';
 import Record from '@/model/record.model.ts';
+import ServiceEntry from '@/model/service-entry.model';
 
 export default defineComponent({
   name: 'ServiceItem',
   props: {
     record: {
       type: Object as PropType<Record>,
-      default: new Record(0, 0, 'Name', new Date(), '00:00', 'Details')
+      default: new Record(0, 0, [], new Date(), '00:00', 'Details')
     }
   },
   setup(props) {
@@ -55,11 +72,21 @@ export default defineComponent({
       const weekDay = weekDays[props.record.date.getDay()];
 
       // returning formatted date
-      return `${day}/${month}/${year} (${weekDay}) @ ${hourAndMinute}`;
+      return `${day}/${month}/${year} (${weekDay}) às ${hourAndMinute}`;
+    });
+
+    /**
+     * Computes the total price of the service entries
+     */
+    const computedTotal = computed(() => {
+      const result = props.record.services
+        .map((serviceEntry: ServiceEntry) => serviceEntry.price)
+        .reduce((previous, current) => previous + current, 0);
+      return `R$ ${result.toFixed(2).replace('.', ',')}`;
     });
 
     // expose template variables
-    return { computedDate };
+    return { computedDate, computedTotal };
   }
 });
 </script>
@@ -72,22 +99,50 @@ div.service-item {
   border-top: 1px solid $app-border-color;
   padding: 1rem 1.25rem;
 
-  div.date {
+  div.top {
     display: flex;
     align-items: center;
-    margin-bottom: 0.25rem;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
 
-    div.circle {
-      height: 0.5rem;
-      width: 0.5rem;
-      border-radius: 50%;
-      background-color: $app-button-color-primary;
-      margin-right: 0.5rem;
+    div.left {
+      display: flex;
+      align-items: center;
+
+      div.circle {
+        height: 0.5rem;
+        width: 0.5rem;
+        border-radius: 50%;
+        background-color: $app-button-color-primary;
+        margin-right: 0.5rem;
+      }
+    }
+
+    div.right {
+      font-family: 'Roboto Condensed Regular';
+      font-weight: bold;
     }
   }
 
-  div.service {
-    margin-bottom: 0.25rem;
+  div.services {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+
+    div.service {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      div.right {
+        font-family: 'Roboto Condensed Regular';
+      }
+    }
+  }
+
+  div.details {
+    margin-top: 0.5rem;
+    color: $app-font-color-faded;
   }
 
   &:hover {
@@ -95,7 +150,11 @@ div.service-item {
     color: $app-font-color-white;
     background-color: $app-button-color-alternative-hover;
 
-    div.date div.circle {
+    div.details {
+      color: $app-font-color-white;
+    }
+
+    div.top div.left div.circle {
       background-color: $app-background-color-white;
     }
   }
@@ -105,7 +164,11 @@ div.service-item {
     color: $app-font-color-white;
     background-color: $app-button-color-alternative-active;
 
-    div.date div.circle {
+    div.details {
+      color: $app-font-color-white;
+    }
+
+    div.top div.left div.circle {
       background-color: $app-background-color-white;
     }
   }

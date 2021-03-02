@@ -2,6 +2,7 @@
   <div class="input-field">
     <input
       class="input-field"
+      :class="{ 'text-align-center': textAlignCenter }"
       :type="type"
       :value="modelValue"
       :placeholder="placeholder"
@@ -27,7 +28,8 @@ export default defineComponent({
     icon: { type: String },
     disabled: { type: Boolean, default: false },
     inputMode: { type: String, default: '' },
-    maxLength: { type: String, default: '' }
+    maxLength: { type: String, default: '' },
+    textAlignCenter: { type: Boolean, default: false }
   },
   emits: ['update:modelValue'],
   setup(props, context) {
@@ -62,6 +64,10 @@ div.input-field {
     padding: 1rem 1.25rem;
     border: none;
     font-size: 1.125rem;
+
+    &.text-align-center {
+      text-align: center;
+    }
 
     &:focus {
       outline: 2px solid $app-outline-color;
