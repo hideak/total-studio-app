@@ -8,7 +8,7 @@
             v-for="item in items"
             :key="item.id"
             :content="item.name"
-            @click="itemAction(item.name)"
+            @click="itemAction(item)"
           />
         </div>
         <div class="footer">
@@ -40,6 +40,7 @@ import ListItem from '@/components/ListItem.vue';
 import InputField from '@/components/InputField.vue';
 import Button from '@/components/Button.vue';
 import ServiceEntry from '@/model/service-entry.model';
+import Service from '@/model/service.model';
 
 export default defineComponent({
   name: 'ServiceSelector',
@@ -117,8 +118,13 @@ export default defineComponent({
      * Emits an event containing the selected item id
      * @param id the id of the clicked item
      */
-    const itemAction = (name: string): void => {
-      service.value = name;
+    const itemAction = (item: Service): void => {
+      service.value = item.name;
+      if (item.defaultPrice) {
+        price.value = `${item.defaultPrice.toFixed(2)}`;
+      } else {
+        price.value = '';
+      }
     };
 
     // exposed template variables

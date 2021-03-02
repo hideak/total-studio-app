@@ -17,6 +17,16 @@
       </div>
       <div class="input-group">
         <Label
+          label="Preço Padrão"
+          :src="require('@/assets/img/dollar-sign-solid.svg')"
+        />
+        <InputField
+          placeholder="Digite o preço do serviço..."
+          v-model="defaultPrice"
+        />
+      </div>
+      <div class="input-group">
+        <Label
           label="Outras Informações"
           :src="require('@/assets/img/info-circle-solid.svg')"
         />
@@ -59,7 +69,7 @@ import Button from '@/components/Button.vue';
 import ServiceCreate from '@/model/dto/service-create';
 import GenericService from '@/services/shared/generic-service';
 import DatabaseConnection from '@/model/interface/database-connection.interface';
-import Service from '@/model/service.model.ts';
+import Service from '@/model/service.model';
 import router from '@/router';
 
 export default defineComponent({
@@ -75,6 +85,7 @@ export default defineComponent({
   },
   setup(props) {
     const name = ref('');
+    const defaultPrice = ref('');
     const details = ref('');
     const route = useRoute();
 
@@ -112,14 +123,33 @@ export default defineComponent({
     };
 
     /**
+     * Parses the price and return it as a number, or null if it is unparsable
+     * @return the price as a string, or null if it is unparsable
+     */
+    const parseDefaultPrice = (defaultPrice: string): number | null => {
+      const pattern = /\d*[.|,]\d+/;
+      const result = pattern.exec(defaultPrice);
+      if (result) {
+        return parseFloat(result[0].replace(',', '.'));
+      } else {
+        return null;
+      }
+    };
+
+    /**
      * Parses the service data and returns a service creation DTO
      * @returns a new service DTO the parsed data
      */
     const parseCreateData = (): ServiceCreate => {
       const serviceName = name.value;
+      const serviceDefaultPrice = parseDefaultPrice(defaultPrice.value);
       const serviceDetails = details.value;
 
-      return new ServiceCreate(serviceName, serviceDetails);
+      return new ServiceCreate(
+        serviceName,
+        serviceDefaultPrice,
+        serviceDetails
+      );
     };
 
     /**
@@ -128,9 +158,15 @@ export default defineComponent({
      */
     const parseUpdateData = (): Service => {
       const serviceName = name.value;
+      const serviceDefaultPrice = parseDefaultPrice(defaultPrice.value);
       const serviceDetails = details.value;
 
-      return new Service(getServiceId(), serviceName, serviceDetails);
+      return new Service(
+        getServiceId(),
+        serviceName,
+        serviceDefaultPrice,
+        serviceDetails
+      );
     };
 
     /**
@@ -200,6 +236,9 @@ export default defineComponent({
       serviceService.get(serviceId).then((service: Service) => {
         // updating fields
         name.value = service.name;
+        defaultPrice.value = service.defaultPrice
+          ? `R$ ${service.defaultPrice.toFixed(2).replace('.', ',')}`
+          : '';
         details.value = service.details;
       });
     }
@@ -207,6 +246,7 @@ export default defineComponent({
     // expose template variables
     return {
       name,
+      defaultPrice,
       details,
       header,
       cancelAction,
