@@ -9,7 +9,7 @@
 
 <script lang="ts">
 import { defineComponent, provide } from 'vue';
-import { dbConnect } from '@/util/idb.ts';
+import { dbConnect } from '@/util/idb';
 import DatabaseConnection from './model/interface/database-connection.interface';
 
 export default defineComponent({

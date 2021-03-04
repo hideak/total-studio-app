@@ -25,7 +25,7 @@ import AddCircleButton from '@/components/AddCircleButton.vue';
 import ListItem from '@/components/ListItem.vue';
 import TitleBar from '@/components/TitleBar.vue';
 import InputField from '@/components/InputField.vue';
-import SortableListItem from '@/model/interface/sortable-list-item.interface.ts';
+import SortableListItem from '@/model/interface/sortable-list-item.interface';
 
 export default defineComponent({
   name: 'ScrollableList',

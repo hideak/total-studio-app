@@ -1,5 +1,5 @@
 import DatabaseConnection from '@/model/interface/database-connection.interface';
-import { migrate } from '@/util/migrations.ts';
+import { migrate } from '@/util/migrations';
 
 // Error messages
 const indexedDBNotAvailable =

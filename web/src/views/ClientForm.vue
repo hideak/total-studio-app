@@ -81,12 +81,12 @@
 <script lang="ts">
 import { computed, defineComponent, inject, ref } from 'vue';
 import { useRoute } from 'vue-router';
-import { stringToDate, dateToString } from '@/util/date-utils.ts';
+import { stringToDate, dateToString } from '@/util/date-utils';
 import TitleBar from '@/components/TitleBar.vue';
 import InputField from '@/components/InputField.vue';
 import Label from '@/components/Label.vue';
 import Button from '@/components/Button.vue';
-import Client from '@/model/client.model.ts';
+import Client from '@/model/client.model';
 import ClientCreate from '@/model/dto/client-create';
 import DatabaseConnection from '@/model/interface/database-connection.interface';
 import GenericService from '@/services/shared/generic-service';

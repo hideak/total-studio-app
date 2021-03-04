@@ -1,6 +1,6 @@
 import ServiceInterface from './service.interface';
 import DatabaseConnection from '@/model/interface/database-connection.interface';
-import { dbGet, dbGetAll, dbCreate, dbUpdate, dbDelete } from '@/util/idb.ts';
+import { dbGet, dbGetAll, dbCreate, dbUpdate, dbDelete } from '@/util/idb';
 
 export default class GenericService<Entity, EntityCreate>
   implements ServiceInterface<Entity, EntityCreate> {

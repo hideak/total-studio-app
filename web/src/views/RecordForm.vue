@@ -104,7 +104,7 @@ import Label from '@/components/Label.vue';
 import Button from '@/components/Button.vue';
 import ServiceSelector from '@/components/ServiceSelector.vue';
 import ListItem from '@/components/ListItem.vue';
-import Record from '@/model/record.model.ts';
+import Record from '@/model/record.model';
 import RecordCreate from '@/model/dto/record-create';
 import Service from '@/model/service.model';
 import ServiceCreate from '@/model/dto/service-create';
