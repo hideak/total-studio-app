@@ -22,6 +22,7 @@
         />
         <InputField
           placeholder="Digite o preço do serviço..."
+          inputmode="numeric"
           v-model="defaultPrice"
         />
       </div>

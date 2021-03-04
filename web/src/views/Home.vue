@@ -18,7 +18,7 @@
         @click="navigateTo({ name: 'Services' })"
       />
     </div>
-    <div class="footer">Total Studio v1.0 @ 2021</div>
+    <div class="footer">Total Studio v1.01 @ 2021</div>
   </div>
 </template>
 
