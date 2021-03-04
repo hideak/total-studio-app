@@ -128,7 +128,7 @@ export default defineComponent({
      * @return the price as a string, or null if it is unparsable
      */
     const parseDefaultPrice = (defaultPrice: string): number | null => {
-      const pattern = /\d*[.|,]\d+/;
+      const pattern = /\d*[.|,]?\d+/;
       const result = pattern.exec(defaultPrice);
       if (result) {
         return parseFloat(result[0].replace(',', '.'));
